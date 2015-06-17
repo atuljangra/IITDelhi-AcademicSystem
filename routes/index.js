@@ -6,6 +6,7 @@ var path = require('path');
 var connectionString = require(path.join(__dirname, '../', 'config')); 
 
 router.get('/', function(req, res, next) {
+    console.log("Get at /");
     res.sendFile(path.join('../', 'views', index.html));
     });
 
@@ -30,7 +31,8 @@ router.post('/api/faculty', function(req, res) {
         query.on('row', function(row) {
             results.push(row);
         });
-
+    
+        console.log("Post");
         // After all data is returned, close connection and return results
         query.on('end', function() {
             client.end();
@@ -60,6 +62,8 @@ router.get('/api/faculty', function(req, res) {
         query.on('row', function(row) {
             results.push(row);
         });
+
+        concole.log("Get");
 
         // After all data is returned, close connection and return results
         query.on('end', function() {
@@ -94,7 +98,7 @@ router.put('/api/faculty/:faculty_id', function(req, res) {
 
         // SQL Query > Select Data
         var query = client.query("SELECT * FROM faculty ORDER BY id ASC");
-
+        console.log("put");
         // Stream results back one row at a time
         query.on('row', function(row) {
             results.push(row);
@@ -132,6 +136,7 @@ router.delete('/api/faculty/:faculty_id', function(req, res) {
         // SQL Query > Select Data
         var query = client.query("SELECT * FROM items ORDER BY id ASC");
 
+        console.log("delete");
         // Stream results back one row at a time
         query.on('row', function(row) {
             results.push(row);
