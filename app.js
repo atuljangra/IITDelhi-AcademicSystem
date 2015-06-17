@@ -4,7 +4,7 @@ var app = express();
 // nBody parser for getting the data from post request.
 var bodyParser = require('body-parser');
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: false }));
+// app.use(bodyParser.urlencoded({extended: false }));
 var path = require('path');
 console.log("Working");
 var routes = require('./routes/index');
