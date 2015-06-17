@@ -135,7 +135,7 @@ router.delete('/api/faculty/:faculty_id', function(req, res) {
         client.query("DELETE FROM faculty WHERE id=($1)", [id]);
 
         // SQL Query > Select Data
-        var query = client.query("SELECT * FROM items ORDER BY id ASC");
+        var query = client.query("SELECT * FROM faculty ORDER BY id ASC");
 
         console.log("delete");
         // Stream results back one row at a time

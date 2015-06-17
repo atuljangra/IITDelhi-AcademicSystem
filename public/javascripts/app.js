@@ -29,6 +29,7 @@ angular.module('nodeAcad', [])
     };
 
     $scope.deleteFaculty = function(facultyID) {
+        console.log("Deleting.. " + facultyID);
         $http.delete('/api/faculty/' + facultyID)
             .success(function(data) {
                 $scope.facultyData = data;

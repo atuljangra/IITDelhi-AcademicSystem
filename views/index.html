@@ -10,8 +10,10 @@
   <div class="container">
         
         <ul ng-repeat="faculty in facultyData">
-          <li>Name: {{faculty.name}}   Dept: {{faculty.dept}} </li>
-      </ul>
+            <li><h3><input class="lead" type="checkbox"
+                ng-click="deleteFaculty(faculty.id)"> 
+                Name: {{faculty.name}}   Dept: {{faculty.dept}} </li> </h3>
+        </ul>
 
       <div class="addForm">
           <form>
