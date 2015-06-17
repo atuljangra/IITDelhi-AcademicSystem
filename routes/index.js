@@ -7,7 +7,7 @@ var connectionString = require(path.join(__dirname, '../', 'config'));
 
 router.get('/', function(req, res, next) {
     console.log("Get at /");
-    res.sendFile(path.join('../', 'views', index.html));
+    res.sendFile(path.join(__dirname, '../', 'views', 'index.html'));
     });
 
 // FACULTY. POST Req will add.
@@ -63,7 +63,7 @@ router.get('/api/faculty', function(req, res) {
             results.push(row);
         });
 
-        concole.log("Get");
+        console.log("Get");
 
         // After all data is returned, close connection and return results
         query.on('end', function() {
