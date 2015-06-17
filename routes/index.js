@@ -61,6 +61,7 @@ router.get('/api/faculty', function(req, res) {
         // Stream results back one row at a time
         query.on('row', function(row) {
             results.push(row);
+            console.log("R:: %s", row.name);
         });
 
         console.log("Get");

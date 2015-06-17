@@ -6,10 +6,10 @@
     <link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet" media="screen">
   </head>
   <body ng-controller="mainController">
-  All the facult listings:
+  All the faculty listings are below
     <div class="container">
-      <ul ng-repeat="faculty in acadData">
-        <li></li>
+      <ul ng-repeat="faculty in facultyData">
+          <li>Hello: {{faculty.name}}</li>
       </ul>
     </div>
     <script src="http://code.jquery.com/jquery-1.11.2.min.js" type="text/javascript"></script>
