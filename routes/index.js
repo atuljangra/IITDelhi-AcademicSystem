@@ -1,9 +1,13 @@
 var express = require('express');
 var router = express.Router();
 var pg = require('pg');
-var path = rrequire('path');
+var path = require('path');
 
 var connectionString = require(path.join(__dirname, '../', 'config')); 
+
+router.get('/', function(req, res, next) {
+    res.sendFile(path.join('../', 'views', index.html));
+    });
 
 // FACULTY. POST Req will add.
 router.post('/api/faculty', function(req, res) {
