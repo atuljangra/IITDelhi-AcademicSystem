@@ -6,24 +6,24 @@
     <link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet" media="screen">
   </head>
   <body ng-controller="mainController">
-  All the faculty listings are below
+  <h1> All the faculty listings are below </h1>
   <div class="container">
         
-        <ul ng-repeat="faculty in facultyData">
-            <li><h3><input class="lead" type="checkbox"
+        <ul class="list-group" ng-repeat="faculty in facultyData">
+            <li class="list-group-item"><input class="lead" type="checkbox"
                 ng-click="deleteFaculty(faculty.id)"> 
-                Name: {{faculty.name}}   Dept: {{faculty.dept}} </li> </h3>
+                Name: {{faculty.name}}   Dept: {{faculty.dept}} </li> 
         </ul>
 
       <div class="addForm">
           <form>
               <div class=form-group">
                   <input type="text" class="form-control input-lg"
-                  placeholder="Enter name.." ng-model="formData.name">
-                  <input type="text" class="form-control input lg"
-                  placeholder="Enter dept.." ng-model="formData.dept">
+                  placeholder="Enter name of the faculty.." ng-model="formData.name">
+                  <input type="text" class="form-control input-lg"
+                  placeholder="Enter dept of the faculty.." ng-model="formData.dept">
               </div>
-              <button type="submit" class="btn btn-primary btn-lg btn-block"
+              <button type="submit" class="btn btn-primary btn-lg "
                   ng-click="createFaculty()">Add Faculty</button>
           </div>
     </div>
