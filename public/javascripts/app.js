@@ -16,6 +16,7 @@ angular.module('nodeAcad', [])
     });
 
     $scope.createFaculty = function(facultyID) {
+        console.log($scope.formData.name + " " +  $scope.formData.dept);
         $http.post('/api/faculty', $scope.formData)
             .success(function(data) {
                 $scope.formData = {};
@@ -26,6 +27,7 @@ angular.module('nodeAcad', [])
                 console.log('Error: ' + error);
             });
     };
+
     $scope.deleteFaculty = function(facultyID) {
         $http.delete('/api/faculty/' + facultyID)
             .success(function(data) {

@@ -14,7 +14,7 @@ router.get('/', function(req, res, next) {
 router.post('/api/faculty', function(req, res) {
 
     var results = [];
-
+    console.log(req.params); 
     // Grab data from http request
     var data = {name: req.body.name, dept: req.body.dept};
 
