@@ -1,162 +1,211 @@
 var express = require('express');
 var router = express.Router();
 var pg = require('pg');
+var query = require('pg-query');
 var path = require('path');
 
-var connectionString = require(path.join(__dirname, '../', 'config')); 
+query.connectionParameters = require(path.join(__dirname, '../', 'config')); 
 
 router.get('/', function(req, res, next) {
     console.log("Get at /");
     res.sendFile(path.join(__dirname, '../', 'views', 'index.html'));
+});
+
+var query_res = function(query_string, res) {
+
+    query(query_string, function(err, rows, result) {
+    
+        if(err) {
+        
+            console.log('Error: ' + err);
+            return res.json([]);
+        
+        }
+        return res.json(rows);
+    
     });
+
+}
+
+//Fetch faculty list
+router.get('/api/faculty', function(req, res) {
+
+    return query_res("SELECT * FROM faculty ORDER BY id ASC",res);
+
+});
+
+//Fetch students list
+router.get('/api/students', function(req, res) {
+
+    return query_res("SELECT * FROM students ORDER BY id ASC",res);
+
+});
+
+//Fetch courses list
+router.get('/api/courses', function(req, res) {
+
+    return query_res("SELECT * FROM courses ORDER BY id ASC",res);
+
+});
 
 // FACULTY. POST Req will add.
 router.post('/api/faculty', function(req, res) {
 
-    var results = [];
-
+    console.log(req.body);
     // Grab data from http request
     var data = {name: req.body.name, dept: req.body.dept};
-
-    // Get a Postgres client from the connection pool
-    pg.connect(connectionString, function(err, client, done) {
-
-        // SQL Query > Insert Data
-        client.query("INSERT INTO faculty(name, dept) values($1, $2)", [data.name, data.dept]);
-
-        // SQL Query > Select Data
-        var query = client.query("SELECT * FROM faculty");
-
-        // Stream results back one row at a time
-        query.on('row', function(row) {
-            results.push(row);
-        });
+    query("INSERT INTO faculty(name, dept) values($1, $2)", [data.name, data.dept], function(err, rows, result) {
     
-        console.log("Post");
-        // After all data is returned, close connection and return results
-        query.on('end', function() {
-            client.end();
-            return res.json(results);
-        });
-
-        // Handle Errors
-        if(err) {
-          console.log(err);
+        if(err){
+            console.log('Error: ' + err);
         }
-
-    });
-});
-
-
-router.get('/api/faculty', function(req, res) {
-
-    var results = [];
-
-    // Get a Postgres client from the connection pool
-    pg.connect(connectionString, function(err, client, done) {
-
-        // SQL Query > Select Data
-        var query = client.query("SELECT * FROM faculty ORDER BY id ASC;");
-
-        // Stream results back one row at a time
-        query.on('row', function(row) {
-            results.push(row);
-            console.log("R:: %s", row.name);
-        });
-
-        console.log("Get");
-
-        // After all data is returned, close connection and return results
-        query.on('end', function() {
-            client.end();
-            return res.json(results);
-        });
-
-        // Handle Errors
-        if(err) {
-          console.log(err);
-        }
-
+        return query_res("select * from faculty", res);
+    
     });
 
 });
 
+// STUDENTS. POST Req will add.
+router.post('/api/students', function(req, res) {
+
+    // Grab data from http request
+    var data = {name: req.body.name, dept: req.body.dept, entry: req.body.entry};
+    query("INSERT INTO students(name, dept, entry) values($1, $2, $3)", [data.name, data.dept, data.entry], function(err, rows, result) {
+    
+        if(err){
+            console.log('Error: ' + err);
+        }
+        return query_res("select * from students", res);
+    
+    });
+
+});
+
+// COURSES. POST Req will add.
+router.post('/api/courses', function(req, res) {
+
+    // Grab data from http request
+    var data = {name: req.body.name, dept: req.body.dept, code: req.body.code};
+    query("INSERT INTO courses(name, dept, code) values($1, $2, $3)", [data.name, data.dept, data.code], function(err, rows, result) {
+    
+        if(err){
+            console.log('Error: ' + err);
+        }
+        return query_res("select * from courses", res);
+    
+    });
+
+});
+
+//update faculty 
 router.put('/api/faculty/:faculty_id', function(req, res) {
 
-    var results = [];
-
     // Grab data from the URL parameters
     var id = req.params.faculty_id;
 
     // Grab data from http request
     var data = {name: req.body.name, dept: req.body.dept};
 
-    // Get a Postgres client from the connection pool
-    pg.connect(connectionString, function(err, client, done) {
-
-        // SQL Query > Update Data
-        client.query("UPDATE faculty SET name=($1), dept=($2) WHERE id=($3)", [data.name, data.dept, id]);
-
-        // SQL Query > Select Data
-        var query = client.query("SELECT * FROM faculty ORDER BY id ASC");
-        console.log("put");
-        // Stream results back one row at a time
-        query.on('row', function(row) {
-            results.push(row);
-        });
-
-        // After all data is returned, close connection and return results
-        query.on('end', function() {
-            client.end();
-            return res.json(results);
-        });
-
-        // Handle Errors
-        if(err) {
-          console.log(err);
+    query("UPDATE faculty SET name=($1), dept=($2) WHERE id=($3)", [data.name, data.dept, id], function(err, rows, result) {
+    
+        if(err){
+            console.log('Error: ' + err);
         }
-
+        return query_res("select * from courses", res);
+    
     });
 
 });
 
-router.delete('/api/faculty/:faculty_id', function(req, res) {
+//update students 
+router.put('/api/students/:students_id', function(req, res) {
 
-    var results = [];
+    // Grab data from the URL parameters
+    var id = req.params.students_id;
+
+    // Grab data from http request
+    var data = {name: req.body.name, dept: req.body.dept, entry:req.body.entry};
+
+    query("UPDATE students SET name=($1), dept=($2), entry=($3) WHERE id=($4)", [data.name, data.dept, data.entry, id], function(err, rows, result) {
+    
+        if(err){
+            console.log('Error: ' + err);
+        }
+        return query_res("select * from students", res);
+    
+    });
+
+});
+
+//update courses 
+router.put('/api/courses/:courses_id', function(req, res) {
+
+    // Grab data from the URL parameters
+    var id = req.params.courses_id;
+
+    // Grab data from http request
+    var data = {name: req.body.name, dept: req.body.dept, code: req.body.code};
+
+    query("UPDATE courses SET name=($1), dept=($2), code=($3) WHERE id=($4)", [data.name, data.dept, data.code, id], function(err, rows, result) {
+    
+        if(err){
+            console.log('Error: ' + err);
+        }
+        return query_res("select * from courses", res);
+    
+    });
+
+});
+
+//delete from faculty
+router.delete('/api/faculty/:faculty_id', function(req, res) {
 
     // Grab data from the URL parameters
     var id = req.params.faculty_id;
 
-
-    // Get a Postgres client from the connection pool
-    pg.connect(connectionString, function(err, client, done) {
-
-        // SQL Query > Delete Data
-        client.query("DELETE FROM faculty WHERE id=($1)", [id]);
-
-        // SQL Query > Select Data
-        var query = client.query("SELECT * FROM items ORDER BY id ASC");
-
-        console.log("delete");
-        // Stream results back one row at a time
-        query.on('row', function(row) {
-            results.push(row);
-        });
-
-        // After all data is returned, close connection and return results
-        query.on('end', function() {
-            client.end();
-            return res.json(results);
-        });
-
-        // Handle Errors
-        if(err) {
-          console.log(err);
+    query("DELETE FROM faculty WHERE id=($1)", [id], function(err, rows, result) {
+    
+        if(err){
+            console.log('Error: ' + err);
         }
-
+        return query_res("select * from faculty", res);
+    
     });
 
 });
 
+//delete from students
+router.delete('/api/students/:students_id', function(req, res) {
+
+    // Grab data from the URL parameters
+    var id = req.params.students_id;
+
+    query("DELETE FROM students WHERE id=($1)", [id], function(err, rows, result) {
+    
+        if(err){
+            console.log('Error: ' + err);
+        }
+        return query_res("select * from students", res);
+    
+    });
+
+});
+
+//delete from courses
+router.delete('/api/courses/:courses_id', function(req, res) {
+
+    // Grab data from the URL parameters
+    var id = req.params.courses_id;
+
+    query("DELETE FROM courses WHERE id=($1)", [id], function(err, rows, result) {
+    
+        if(err){
+            console.log('Error: ' + err);
+        }
+        return query_res("select * from courses", res);
+    
+    });
+
+});
 
 module.exports = router;

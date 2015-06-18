@@ -1,23 +1,71 @@
+/*
 body {
   padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  overflow: hidden;
 }
 
-a {
-  color: #00B7FF;
+#left_panel, #right_panel {
+  position: absolute;
+  width: 200px;
+  height: 100%;
+  overflow: hidden;
 }
 
-ul {
-  list-style-type: none;
-  padding-left: 10px;
+#right_panel {
+  left: auto;
+  right: 0;
+  overflow: hidden;
+  width: 200px;
 }
 
-.container {
-  max-width: 400px;
-  background-color: #eeeeee;
-  border: 1px solid black;
+#container {
+  position: fixed;
+  left: 200px;
+  right: 200px;
+  overflow: auto;
+}
+*/
+body{
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  overflow: hidden;
+  height: 100%; 
+  max-height: 100%; 
 }
 
-.header {
-  text-align: center;
+#left_panel, #right_panel{
+  position: absolute; 
+  top: 0; 
+  left: 0; 
+  width: 250px; /*Width of left frame div*/
+  height: 100%;
+  overflow: hidden; /*Disable scrollbars. Set to "scroll" to enable*/
+  background-color: navy;
+  color: black;
+}
+
+#right_panel{
+  left: auto;
+  right: 0; 
+  width: 200px; /*Width of right frame div*/
+  overflow: hidden; /*Disable scrollbars. Set to "scroll" to enable*/
+  background-color: navy;
+  color: black;
+}
+
+#main_content{
+  position: fixed; 
+  top: 0;
+  left: 250px; /*Set left value to WidthOfLeftFrameDiv*/
+  right: 200px; /*Set right value to WidthOfRightFrameDiv*/
+  bottom: 0;
+  overflow: auto; 
+  background: #fff;
+}
+
+.innertube{
+  margin: 15px; /*Margins for inner DIV inside each DIV (to provide padding)*/
 }
