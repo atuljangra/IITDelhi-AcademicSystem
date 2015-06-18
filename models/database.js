@@ -13,7 +13,7 @@ client.connect(function (err) {
 
 
     client.query("CREATE TABLE faculty(id SERIAL PRIMARY KEY, name VARCHAR(40) \
-            not null, dept VARCHAR(50))", function(err, result) {
+            not null, dept VARCHAR(60))", function(err, result) {
                 if (err) {
                     return console.error("Unable to execute Query", err);
                 }
@@ -33,7 +33,7 @@ studentclient.connect(function (err) {
 
 
     studentclient.query("CREATE TABLE students(id SERIAL PRIMARY KEY, name VARCHAR(40) \
-            not null, dept VARCHAR(50), entryno VARCHAR(25))", function(err, result) {
+            not null, dept VARCHAR(60), entry VARCHAR(15))", function(err, result) {
                 if (err) {
                     return console.error("Unable to execute Query", err);
                 }
@@ -52,8 +52,8 @@ coursesclient.connect(function (err) {
     }
 
 
-    coursesclient.query("CREATE TABLE courses(id SERIAL PRIMARY KEY, code VARCHAR(40) \
-            not null, name VARCHAR(40))", function(err, result) {
+    coursesclient.query("CREATE TABLE courses(id SERIAL PRIMARY KEY,name VARCHAR(40), dept VARCHAR(60), \
+    code VARCHAR(10) not null)", function(err, result) {
                 if (err) {
                     return console.error("Unable to execute Query", err);
                 }
