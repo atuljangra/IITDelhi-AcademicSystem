@@ -111,7 +111,7 @@ router.put('/api/faculty/:faculty_id', function(req, res) {
         if(err){
             console.log('Error: ' + err);
         }
-        return query_res("select * from courses", res);
+        return query_res("select * from faculty", res);
     
     });
 
