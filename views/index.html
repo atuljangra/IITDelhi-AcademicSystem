@@ -4,19 +4,21 @@
   <head>
     <title>Academics Portal</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet" media="screen">
+      <link rel="stylesheet"
+      href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css"/>
     <link href="stylesheets/style.css" rel="stylesheet" media="screen">
   </head>
 
   <body ng-controller="mainController">
-    <div class="left_panel" id="left_panel">
-      <div class="innertube">
-        <ul class="list_options">
-          <li><button class="option" ng-click="mark_faculty()"><h1>Faculty</h1></button></li>
-          <li><button class="option" ng-click="mark_students()"><h1>Students</h1></button></li>
-          <li><button class="option" ng-click="mark_courses()"><h1>Courses</h1></button></li>
-        </ul>
-      </div>
+    <div class="panel panel-primary" >
+        <div class="panel-heading"> Choose category </div>
+        <div class="panel-body">
+            <div class="innertube">
+                <li><button class="btn btn-primary" ng-click="mark_faculty()"><h1>Faculty</h1></button></li>
+                <li><button class="btn btn-primary" ng-click="mark_students()"><h1>Students</h1></button></li>
+                <li><button class="btn btn-primary" ng-click="mark_courses()"><h1>Courses</h1></button></li>
+            </div>
+        </div>
     </div>
 
     <div class="right_panel" id="right_panel">
@@ -34,9 +36,45 @@
         <div class="new_field">
           <div class="faculty_new" ng-show="is_faculty">
             <form>
-              <input type="text" class="form_text" placeholder="Enter name..." ng-model="formData.name">
-              <input type="text" class="form_text" placeholder="Enter dept..." ng-model="formData.dept">
-            </form>
+                <h3>The list of faculties</h3>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Select</th>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Department</th>
+                        </tr>
+                    </thead>
+                    <tbody> 
+                    <tr ng-repeat="faculty in list_data">
+                        <td><input type="radio" name="faculty"
+                            ng-model="radio.id" ng-value="{{faculty.id}}">
+                        <td>{{faculty.id}}</td>
+                        <td>{{faculty.name}}</td>
+                        <td>{{faculty.dept}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+                
+                <div class="panel panel-primary">
+                    <div class="panel-heading">Operation </div>
+                    <div class=panel-body>
+                        <div class=innertube>
+                            <input type="text" class="form_text" placeholder="Enter name..." 
+                            ng-model="formData.name">
+                            <input type="text" class="form_text" placeholder="Enter dept..." 
+                            ng-model="formData.dept">
+                           <button class="btn btn-success"
+                                ng-click="add()">Add</button>
+                            <button class="btn btn-danger"
+                                ng-click="delete_entry()">Delete</button>
+                            <button class="btn btn-warning" ng-click="modify()">Modify</button>
+                        </div>
+                    </div>
+                </div>
+
+           </form>
           </div>
           <div class="students_new" ng-show="is_students">
             <form>
@@ -55,12 +93,6 @@
         </div>
 
         <div class="container">
-          <div class="faculty_container" ng-show="is_faculty">
-            <ul ng-repeat="faculty in list_data">
-                <li><input type="radio" name="faculty" ng-model="radio.id" ng-value="{{faculty.id}}" class="radio">{{faculty.id}}, {{faculty.name}}, {{faculty.dept}}</li>
-            </ul>
-          </div>
-          
           <div class="students_container" ng-show="is_students">
             <ul ng-repeat="students in list_data">
                 <li><input type="radio" name="students" ng-model="radio.id" ng-value="{{students.id}}" class="radio">{{students.id}}, {{students.name}}, {{students.dept}}, {{students.entry}}</li>

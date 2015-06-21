@@ -66,6 +66,12 @@ body{
   background: #fff;
 }
 
+li{
+list-style-type:none;
+}
+
 .innertube{
   margin: 15px; /*Margins for inner DIV inside each DIV (to provide padding)*/
+  margin-top: 5px;
+  margin-bottom: 5px;
 }
