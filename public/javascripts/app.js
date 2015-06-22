@@ -90,6 +90,51 @@ var modify_func = function($scope, $http, id) {
 
 }
 
+var query_func = function($scope, $http, id) {
+    var ret_func;
+    var keyword;
+    var query;
+    var data = id;
+    if(data === undefined) {
+        console.log("Data is undefined");
+        return;
+    }
+    // Search of keywords.
+    if (data.search("name") > -1) {
+        keyword = "name";
+        query = data.replace("name=", "");
+    } else if(data.search("code") > -1) {
+        keyword = "code";
+        query = data.replace("code=", "");
+    } else if (data.search("entry") > -1) {
+        keyword = "entry";
+        query = data.replace("entry=", "");
+    }
+    else if (data.search("dept") > -1) {
+        keyword = "dept";
+        query = data.replace("dept=", "");
+    }
+    else {
+        // TODO show error here;
+        console.log("Invalid keyword");
+        return;
+    }
+
+    if($scope.is_faculty) {
+        ret_func = $http.post('/api/query/', {key:keyword, query:query});
+    }
+
+    ret_func.success(function(data) {
+        $scope.formData = {};
+        $scope.list_data = data;
+        console.log(data);
+    });
+    
+    ret_func.error(function(error) {
+        console.log('Error: ' + error);
+    });
+}
+
 nodeAcad.controller('mainController', function($scope, $http) {
     $scope.formData = {};
     $scope.facultyData = {};
@@ -110,6 +155,9 @@ nodeAcad.controller('mainController', function($scope, $http) {
     }
     $scope.modify = function() {
         modify_func($scope, $http, $scope.radio.id);
+    }
+    $scope.query = function() {
+        query_func($scope, $http, $scope.formData.query);
     }
 
     $scope.mark_faculty = function() {

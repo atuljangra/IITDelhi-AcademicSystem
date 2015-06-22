@@ -208,4 +208,10 @@ router.delete('/api/courses/:courses_id', function(req, res) {
 
 });
 
+// 
+router.post('/api/query', function(req, res) {
+    console.log(req.body.key);
+});
+
+
 module.exports = router;
