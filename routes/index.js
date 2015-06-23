@@ -209,8 +209,81 @@ router.delete('/api/courses/:courses_id', function(req, res) {
 });
 
 // 
-router.post('/api/query', function(req, res) {
-    console.log(req.body.key);
+router.post('/api/faculty/query', function(req, res) {
+    var key = req.body.key;
+    var word = req.body.queryWord;
+    console.log(key + "  " + word);
+    // TODO use col as parameter.
+
+    var query_string;
+    if (key == "name") {
+        query_string = ("SELECT * from faculty where name=\'" + word + "\'");
+    } else if (key == "dept") {
+        query_string = ("select * from faculty where dept=\'" + word + "\'");
+    } else {
+        console.log("Faculty Query: Invalid keyword");
+        return;
+    }
+    query(query_string, function(err, rows, result) {
+        if(err) {
+            console.log("Error: " + err);
+        }
+        console.log(rows);
+        return res.json(rows);
+    });
+});
+
+// 
+router.post('/api/students/query', function(req, res) {
+    var key = req.body.key;
+    var word = req.body.queryWord;
+    console.log(key + "  " + word);
+    // TODO use col as parameter.
+
+    var query_string;
+    if (key == "name") {
+        query_string = ("SELECT * from students where name=\'" + word + "\'");
+    } else if (key == "dept") {
+        query_string = ("select * from students where dept=\'" + word + "\'");
+    } else if (key == "entry") {
+        query_string = ("select * from students where entry=\'" + word + "\'");
+    } else {
+        console.log("Students Query: Invalid keyword");
+        return;
+    }
+    query(query_string, function(err, rows, result) {
+        if(err) {
+            console.log("Error: " + err);
+        }
+        console.log(rows);
+        return res.json(rows);
+    });
+});
+
+router.post('/api/courses/query', function(req, res) {
+    var key = req.body.key;
+    var word = req.body.queryWord;
+    console.log(key + "  " + word);
+    // TODO use col as parameter.
+
+    var query_string;
+    if (key == "name") {
+        query_string = ("SELECT * from courses where name=\'" + word + "\'");
+    } else if (key == "dept") {
+        query_string = ("select * from courses where dept=\'" + word + "\'");
+    } else if (key == "code") {
+        query_string = ("select * from courses where code=\'" + word + "\'");  
+    } else {
+        console.log("Courses  Query: Invalid keyword");
+        return;
+    }
+    query(query_string, function(err, rows, result) {
+        if(err) {
+            console.log("Error: " + err);
+        }
+        console.log(rows);
+        return res.json(rows);
+    });
 });
 
 

@@ -7,7 +7,6 @@ query.connectionParameters = require(path.join(__dirname, '../', 'config'));
 
 // CREATE faculty;
 query("create table faculty(id serial primary key, name varchar(40), dept varchar(60))", function(err, rows, result) {});
->>>>>>> sample
 
 // CREATE students;
 query("create table students(id serial primary key, name varchar(40), dept varchar(60), entry varchar(15))", function(err, rows, result) {});

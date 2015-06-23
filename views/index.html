@@ -113,7 +113,11 @@
                             <button class="btn btn-danger"
                                 ng-click="delete_entry()">Delete</button>
                             <button class="btn btn-warning" ng-click="modify()">Modify</button>
-                        </div>
+                              <input type="text" class="form_text" placeholder="Enter query"
+                            ng-model="formData.query" >
+                            <button class="btn btn-info"
+                                ng-click="query()">Query</button>
+                       </div>
                     </div>
                 </div>
           </div>       
@@ -159,6 +163,10 @@
                             <button class="btn btn-danger"
                                 ng-click="delete_entry()">Delete</button>
                             <button class="btn btn-warning" ng-click="modify()">Modify</button>
+                             <input type="text" class="form_text" placeholder="Enter query"
+                            ng-model="formData.query" >
+                            <button class="btn btn-info"
+                                ng-click="query()">Query</button>
                         </div>
                     </div>
                 </div>
@@ -170,9 +178,11 @@
         
         <br>"name = x" will return all the entries whose name is x.
         
-        <br>"entry = x" will return all the entries whose entry is x.
-        
-        <br>Keywords are name, entry, code, dept.
+        <br>"entry = x" will return all the entries whose entry is x. <br>
+        <div ng-show=is_faculty> Keywords are name, dept.</div>
+        <div ng-show=is_students> Keywords are name, entry, dept. </div>
+        <div ng-show=is_courses> Keywords are name, code, dept. </div>
+
       </div>
     </div>
 

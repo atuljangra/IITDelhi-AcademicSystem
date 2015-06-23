@@ -121,14 +121,25 @@ var query_func = function($scope, $http, id) {
     }
 
     if($scope.is_faculty) {
-        ret_func = $http.post('/api/query/', {key:keyword, query:query});
+        console.log("Sending query");
+        ret_func = $http.post('/api/faculty/query', {key:keyword, queryWord:query});
+    }
+    
+    if($scope.is_courses) {
+        ret_func = $http.post('/api/courses/query', {key:keyword, queryWord:query});
+    }
+
+    if($scope.is_students) {
+        ret_func = $http.post('api/students/query', {key:keyword, queryWord:query});
     }
 
     ret_func.success(function(data) {
+        console.log(data);
+        console.log("Success");
         $scope.formData = {};
         $scope.list_data = data;
         console.log(data);
-    });
+    })
     
     ret_func.error(function(error) {
         console.log('Error: ' + error);
