@@ -10,7 +10,7 @@ var pg = require('pg');
 
 // --------GET instructure page which is currently our home page--------\\
 router.get('/', function(req, res, next) {
-res.sendFile(path.join(__dirname,'../','views','crud.html'));
+    res.sendFile(path.join(__dirname,'../','views','crud.html'));
 });
 
 var conString = "postgres://postgres:postgres@localhost/academicportal";
@@ -32,28 +32,28 @@ router.get('/deptmaster', function(req, res) {
         // Handle Errors
         if(err) {
           console.log(err);
-        }
-    });
+      }
+  });
 });
 
 
 //-----------------Add a new record--------------------\\
 router.post('/deptmaster/addrecord', function(req, res) {
     var results = [];
-	console.log("I got the add request");
-	console.log(req.body);
+    console.log("I got the add request");
+    console.log(req.body);
     var data = {id: req.body.dpid, name: req.body.deptname};
     console.log("data.id");
 
     pg.connect(conString, function(err, client, done) {
-    client.query("INSERT INTO deptmaster(dpid,deptname) values($1, $2)", [data.id, data.name]);
-      if(err) {
+        client.query("INSERT INTO deptmaster(dpid,deptname) values($1, $2)", [data.id, data.name]);
+        if(err) {
           console.log(err);
-        }
-        else{
-            return res.json([]);
-        }
-    });
+      }
+      else{
+        return res.json([]);
+    }
+});
 
 });
 
@@ -64,17 +64,17 @@ router.delete('/deptmaster/:id', function(req, res) {
     var results = [];
     var id = req.params.id;
     pg.connect(conString, function(err, client, done) {
-            client.query("DELETE FROM deptmaster WHERE dpid=($1)", [id]);
+        client.query("DELETE FROM deptmaster WHERE dpid=($1)", [id]);
             // Handle Errors
             if(err) {
               console.log(err);
-            }
-            else{
-                return res.json([]);
-            }
+          }
+          else{
+            return res.json([]);
+        }
     });
 
- });
+});
 
 
 //-----------Get the row for a particular id------------\\
@@ -94,8 +94,8 @@ router.get('/deptmaster/:id', function(req, res){
 
         if(err) {
           console.log(err);
-        }
-    });
+      }
+  });
 });    
 
 
@@ -107,26 +107,26 @@ router.put('/deptmaster/query', function(req, res){
     var results = [];
  //   var id = req.params.id;
 //    console.log(id);
-    console.log("This result is from Query function");
-    var data = {id: req.body.id, name: req.body.name};
-    console.log(data);
-    pg.connect(conString, function(err, client, done) {
-        var query = client.query("SELECT * FROM deptmaster WHERE ((deptname ILIKE $1) AND (dpid ILIKE $2))", [data.name+ '%', data.id+ '%']);
-        query.on('row', function(row) {
-            results.push(row);
-        });
-        query.on('end', function() {
-            client.end();
-            return res.json(results);
-        });
+console.log("This result is from Query function");
+var data = {id: req.body.id, name: req.body.name};
+console.log(data);
+pg.connect(conString, function(err, client, done) {
+    var query = client.query("SELECT * FROM deptmaster WHERE ((deptname ILIKE $1) AND (dpid ILIKE $2))", [data.name+ '%', data.id+ '%']);
+    query.on('row', function(row) {
+        results.push(row);
+    });
+    query.on('end', function() {
+        client.end();
+        return res.json(results);
+    });
         // Handle Errors
         if(err) {
           console.log(err);
-        }
-    });
+      }
+  });
 });  
 
- 
+
 
 router.put('/coursemaster/query', function(req, res){
     var results = [];
@@ -135,7 +135,7 @@ router.put('/coursemaster/query', function(req, res){
     console.log(data);
     pg.connect(conString, function(err, client, done) {
         if(credits = -1){
-        var query = client.query("SELECT * FROM coursemaster WHERE ((crid ILIKE $1) AND (dpid ILIKE $2) AND (coursename ILIKE $3) AND (pre_req1 ILIKE $4))", [data.crid+ '%', data.dpid+ '%', data.coursename+ '%']);
+            var query = client.query("SELECT * FROM coursemaster WHERE ((crid ILIKE $1) AND (dpid ILIKE $2) AND (coursename ILIKE $3) AND (pre_req1 ILIKE $4))", [data.crid+ '%', data.dpid+ '%', data.coursename+ '%']);
         }
         else
         {
@@ -152,8 +152,8 @@ router.put('/coursemaster/query', function(req, res){
         // Handle Errors
         if(err) {
           console.log(err);
-        }
-    });
+      }
+  });
 });
 
 
@@ -164,11 +164,11 @@ router.put('/students/query', function(req, res){
     console.log(data);
     pg.connect(conString, function(err, client, done){
         if(year = -1){
-        var query = client.query("SELECT * FROM student WHERE ((stid ILIKE $1) AND (name ILIKE $2) AND (dpid ILIKE $3) AND (degree ILIKE $4))", [data.stid+ '%', data.name+ '%', data.dpid+ '%', data.degree+ '%']);
+            var query = client.query("SELECT * FROM student WHERE ((stid ILIKE $1) AND (name ILIKE $2) AND (dpid ILIKE $3) AND (degree ILIKE $4))", [data.stid+ '%', data.name+ '%', data.dpid+ '%', data.degree+ '%']);
         }
         else
         {
-        var query = client.query("SELECT * FROM student WHERE ((stid ILIKE $1) AND (name ILIKE $2) AND (dpid ILIKE $3) AND (year ILIKE $4) AND (degree ILIKE $5))", [data.stid+ '%', data.name+ '%', data.dpid+ '%', data.year, data.degree+ '%']);
+            var query = client.query("SELECT * FROM student WHERE ((stid ILIKE $1) AND (name ILIKE $2) AND (dpid ILIKE $3) AND (year ILIKE $4) AND (degree ILIKE $5))", [data.stid+ '%', data.name+ '%', data.dpid+ '%', data.year, data.degree+ '%']);
         }
         query.on('row', function(row){
             results.push(row);
@@ -201,8 +201,8 @@ router.put('/faculty/query', function(req, res){
         // Handle Errors
         if(err) {
           console.log(err);
-        }
-    });
+      }
+  });
 });
 //---------------------Update the record --------------\\
 router.put('/deptmaster/:id', function (req, res) {
@@ -211,16 +211,16 @@ router.put('/deptmaster/:id', function (req, res) {
 
   var data = {id: req.body.dpid, name: req.body.deptname};
 
- pg.connect(conString, function(err, client, done) {
-        client.query("UPDATE deptmaster SET deptname=($2) WHERE dpid=($1)", [data.id, data.name]);
+  pg.connect(conString, function(err, client, done) {
+    client.query("UPDATE deptmaster SET deptname=($2) WHERE dpid=($1)", [data.id, data.name]);
 
-        if(err) {
-          console.log(err);
-        }
-        else{
-            return res.json([]);
-        }
-    });
+    if(err) {
+      console.log(err);
+  }
+  else{
+    return res.json([]);
+}
+});
 
 
 });
@@ -237,14 +237,14 @@ router.post('/coursemaster/addrecord', function(req, res) {
     console.log(data);
 
     pg.connect(conString, function(err, client, done) {
-    client.query("INSERT INTO coursemaster(crid, dpid, credits,coursename, pre_req1, pre_req2, pre_req3, pre_req4) values($1, $2, $3, $4, $5, $6, $7, $8)", [data.crid, data.dpid, data.credits ,data.coursename, data.pre_req1, data.pre_req2, data.pre_req3, data.pre_req4]);
-      if(err) {
+        client.query("INSERT INTO coursemaster(crid, dpid, credits,coursename, pre_req1, pre_req2, pre_req3, pre_req4) values($1, $2, $3, $4, $5, $6, $7, $8)", [data.crid, data.dpid, data.credits ,data.coursename, data.pre_req1, data.pre_req2, data.pre_req3, data.pre_req4]);
+        if(err) {
           console.log(err);
-        }
-        else{
-            return res.json([]);
-        }
-    });
+      }
+      else{
+        return res.json([]);
+    }
+});
 
 });
 
@@ -264,8 +264,8 @@ router.get('/coursemaster/all', function(req, res) {
         // Handle Errors
         if(err) {
           console.log(err);
-        }
-    });
+      }
+  });
 });
 
 //-----------Get the row for a particular id------------\\
@@ -285,8 +285,8 @@ router.get('/coursemaster/:id', function(req, res){
 
         if(err) {
           console.log(err);
-        }
-    });
+      }
+  });
 });    
 
 //---------------------Update the record --------------\\
@@ -296,16 +296,16 @@ router.put('/coursemaster/:id', function (req, res) {
   var results = [];
   var data = {coursename: req.body.coursename, dpid: req.body.dpid, credits: req.body.credits, pre_req1: req.body.pre_req1, pre_req2: req.body.pre_req2, pre_req3: req.body.pre_req3, pre_req4: req.body.pre_req4};
 
- pg.connect(conString, function(err, client, done) {
-        client.query("UPDATE coursemaster SET dpid=($2), credits = ($3), coursename= ($4) , pre_req1 = ($5), pre_req2 = ($6)  , pre_req3 = ($7), pre_req4 = ($8) WHERE crid=($1)", [id, data.dpid, data.credits ,data.coursename, data.pre_req1, data.pre_req2, data.pre_req3, data.pre_req4]);
+  pg.connect(conString, function(err, client, done) {
+    client.query("UPDATE coursemaster SET dpid=($2), credits = ($3), coursename= ($4) , pre_req1 = ($5), pre_req2 = ($6)  , pre_req3 = ($7), pre_req4 = ($8) WHERE crid=($1)", [id, data.dpid, data.credits ,data.coursename, data.pre_req1, data.pre_req2, data.pre_req3, data.pre_req4]);
 
-        if(err) {
-          console.log(err);
-        }
-        else{
-            return res.json([]);
-        }
-    });
+    if(err) {
+      console.log(err);
+  }
+  else{
+    return res.json([]);
+}
+});
 
 
 });
@@ -315,18 +315,18 @@ router.delete('/coursemaster/:id', function(req, res) {
     var results = [];
     var id = req.params.id;
     pg.connect(conString, function(err, client, done) {
-            client.query("DELETE FROM coursemaster WHERE crid=($1)", [id]);
-            console.log("Hey the record is deleted");
+        client.query("DELETE FROM coursemaster WHERE crid=($1)", [id]);
+        console.log("Hey the record is deleted");
             // Handle Errors
             if(err) {
               console.log(err);
-            }
-            else{
-                return res.json([]);
-            }
+          }
+          else{
+            return res.json([]);
+        }
     });
 
- });
+});
 
 
 //=================================FOR COURSE RECORDS!!!!=================================\\
@@ -340,14 +340,14 @@ router.post('/students/addrecord', function(req, res) {
     console.log(data.courseid);
 
     pg.connect(conString, function(err, client, done) {
-    client.query("INSERT INTO student(stid, name, dpid, year, degree, address, emailid, contactno) values($1, $2, $3, $4, $5, $6, $7, $8)", [data.stid, data.name, data.dpid, data.year, data.degree, data.address, data.emailid, data.contactno]);
-      if(err) {
+        client.query("INSERT INTO student(stid, name, dpid, year, degree, address, emailid, contactno) values($1, $2, $3, $4, $5, $6, $7, $8)", [data.stid, data.name, data.dpid, data.year, data.degree, data.address, data.emailid, data.contactno]);
+        if(err) {
           console.log(err);
-        }
-        else{
-            return res.json([]);
-        }
-    });
+      }
+      else{
+        return res.json([]);
+    }
+});
 
 });
 
@@ -367,8 +367,8 @@ router.get('/students/all', function(req, res) {
         // Handle Errors
         if(err) {
           console.log(err);
-        }
-    });
+      }
+  });
 });
 
 //-----------Get the row for a particular id------------\\
@@ -388,8 +388,8 @@ router.get('/students/:id', function(req, res){
 
         if(err) {
           console.log(err);
-        }
-    });
+      }
+  });
 });    
 
 //---------------------Update the record --------------\\
@@ -400,16 +400,16 @@ router.put('/students/:id', function (req, res) {
 
   var data = {stid: req.body.stid, name: req.body.name, dpid: req.body.dpid, year: req.body.year, degree: req.body.degree, address: req.body.address, emailid: req.body.emailid, contactno: req.body.contactno};
 
- pg.connect(conString, function(err, client, done) {
-        client.query("UPDATE student SET name=($2), dpid=($3), year=($4), degree=($5), address = ($6), emailid = ($7), contactno = ($8) WHERE stid=($1)", [id, data.name, data.dpid, data.year, data.degree, data.address, data.emailid, data.contactno]);
+  pg.connect(conString, function(err, client, done) {
+    client.query("UPDATE student SET name=($2), dpid=($3), year=($4), degree=($5), address = ($6), emailid = ($7), contactno = ($8) WHERE stid=($1)", [id, data.name, data.dpid, data.year, data.degree, data.address, data.emailid, data.contactno]);
 
-        if(err) {
-          console.log(err);
-        }
-        else{
-            return res.json([]);
-        }
-    });
+    if(err) {
+      console.log(err);
+  }
+  else{
+    return res.json([]);
+}
+});
 
 
 });
@@ -419,18 +419,18 @@ router.delete('/students/:id', function(req, res) {
     var results = [];
     var id = req.params.id;
     pg.connect(conString, function(err, client, done) {
-            client.query("DELETE FROM student WHERE stid=($1)", [id]);
-            console.log("Hey the record is deleted");
+        client.query("DELETE FROM student WHERE stid=($1)", [id]);
+        console.log("Hey the record is deleted");
             // Handle Errors
             if(err) {
               console.log(err);
-            }
-            else{
-                return res.json([]);
-            }
+          }
+          else{
+            return res.json([]);
+        }
     });
 
- });
+});
 
 //=================================FOR FACULTY RECORDS!!!!=================================\\
 
@@ -439,18 +439,18 @@ router.post('/faculty/addrecord', function(req, res) {
     var results = [];
     console.log("I got the add request");
     console.log(req.body);
-     var data = {fcid: req.body.fcid, name:req.body.name, title:req.body.title, dpid:req.body.dpid, emailid:req.body.emailid, contactno:req.body.contactno,areas:req.body.areas};
+    var data = {fcid: req.body.fcid, name:req.body.name, title:req.body.title, dpid:req.body.dpid, emailid:req.body.emailid, contactno:req.body.contactno,areas:req.body.areas};
     console.log(data.fcid);
 
     pg.connect(conString, function(err, client, done) {
-    client.query("INSERT INTO faculty(fcid, name, title,dpid,emailid,contactno,areas) values($1, $2, $3, $4,$5,$6,$7)", [data.fcid, data.name, data.title ,data.dpid,data.emailid, data.contactno,data.areas]);
-      if(err) {
+        client.query("INSERT INTO faculty(fcid, name, title,dpid,emailid,contactno,areas) values($1, $2, $3, $4,$5,$6,$7)", [data.fcid, data.name, data.title ,data.dpid,data.emailid, data.contactno,data.areas]);
+        if(err) {
           console.log(err);
-        }
-        else{
-            return res.json([]);
-        }
-    });
+      }
+      else{
+        return res.json([]);
+    }
+});
 
 });
 
@@ -470,8 +470,8 @@ router.get('/faculty/all', function(req, res) {
         // Handle Errors
         if(err) {
           console.log(err);
-        }
-    });
+      }
+  });
 });
 
 //-----------Get the row for a particular id------------\\
@@ -491,8 +491,8 @@ router.get('/faculty/:id', function(req, res){
 
         if(err) {
           console.log(err);
-        }
-    });
+      }
+  });
 });    
 
 
@@ -505,16 +505,16 @@ router.put('/deptmaster/:id', function (req, res) {
 
   var data = {id: req.body.dpid, name: req.body.deptname};
 
- pg.connect(conString, function(err, client, done) {
-        client.query("UPDATE deptmaster SET deptname=($2) WHERE dpid=($1)", [data.id, data.name]);
+  pg.connect(conString, function(err, client, done) {
+    client.query("UPDATE deptmaster SET deptname=($2) WHERE dpid=($1)", [data.id, data.name]);
 
-        if(err) {
-          console.log(err);
-        }
-        else{
-            return res.json([]);
-        }
-    });
+    if(err) {
+      console.log(err);
+  }
+  else{
+    return res.json([]);
+}
+});
 
 
 });
@@ -524,19 +524,19 @@ router.put('/faculty/:id', function (req, res) {
   console.log(id);
   var results = [];
 
-   var data = {fcid: req.body.fcid, name:req.body.name, title:req.body.title, dpid:req.body.dpid, emailid:req.body.emailid, contactno:req.body.contactno,areas:req.body.areas};
-    
+  var data = {fcid: req.body.fcid, name:req.body.name, title:req.body.title, dpid:req.body.dpid, emailid:req.body.emailid, contactno:req.body.contactno,areas:req.body.areas};
+  
 
- pg.connect(conString, function(err, client, done) {
-        client.query("UPDATE faculty SET name=($2), title=($3),dpid =($4),emailid=($5),contactno =($6), areas=($7) WHERE fcid=($1)", [id, data.name, data.title, data.dpid,data.emailid,data.contactno,data.areas]);
+  pg.connect(conString, function(err, client, done) {
+    client.query("UPDATE faculty SET name=($2), title=($3),dpid =($4),emailid=($5),contactno =($6), areas=($7) WHERE fcid=($1)", [id, data.name, data.title, data.dpid,data.emailid,data.contactno,data.areas]);
 
-        if(err) {
-          console.log(err);
-        }
-        else{
-            return res.json([]);
-        }
-    });
+    if(err) {
+      console.log(err);
+  }
+  else{
+    return res.json([]);
+}
+});
 
 
 });

@@ -30,48 +30,51 @@ showAllInst()/showAllStud()/showAllCourses() -  for displaying (HTML) list of al
 deleteInst()/deleteStud()/deleteCourses() - for displaying the delete form and hiding other HTML views
 updateInst()/updateStud()/updateCourses() - for displaying the update form and hiding other HTML views
 queryInst()/queryStud()/queryCourses() - for displaying query form and hiding other hTML views
- */    
+*/    
 
     //==========Variables and functions to show and hide tables/forms/buttons==========\\ 
 
    $scope.is_students = false;//initally student records are hidden
    $scope.is_instructor=false;//Initially instructor records are hidden, will be displayed when we click instructor button
    $scope.is_deptMaster = false; //initially courses records are hiddedn
-   $scope.is_faculty = false;
+   $scope.is_faculty = false; //initially faculty records are hidden
 
-    $scope.select_deptMaster = function(){
-        $scope.is_students = false;
-        $scope.is_courseMaster = false;
-        $scope.is_faculty = false;
-        $scope.is_deptMaster = true;
-    }
+//when department is clicked
+   $scope.select_deptMaster = function(){
+    $scope.is_students = false;
+    $scope.is_courseMaster = false;
+    $scope.is_faculty = false;
+    $scope.is_deptMaster = true;
+}
 
-    $scope.select_courseMaster = function(){
+//when course is clicked 
+$scope.select_courseMaster = function(){
         $scope.is_deptMaster=false; //to hide the instructor record container in crud.html 
         $scope.is_courseMaster = true; // to display the course record container in crud.html
         $scope.is_students = false;
         $scope.is_faculty = false;
 
     }
-    
+
+//when faculty is clicked   
     $scope.select_faculty = function(){
         $scope.is_faculty = true; // to display the student record container in crud.html
         $scope.is_deptMaster=false; //to hide the instructor record container in crud.html 
         $scope.is_courseMaster = false; // to display the course record container in crud.html
         $scope.is_students = false;
     }
+
+//when student is clicked    
     $scope.select_students = function(){
         $scope.is_courseMaster=false; //to hide the instructor record container in crud.html 
         $scope.is_students = true; //hide the student record container in crud.html
         $scope.is_deptMaster = false;
         $scope.is_faculty = false;
-
     }
 
 }]);
 
-
-
+ //function to add -->sends query to the model 
 var add_record = function($scope, $http){
     var req_url;
     console.log($scope.formData);
@@ -93,28 +96,30 @@ var add_record = function($scope, $http){
     })
 }
 
+//delete record --> deleted the record with id passed as parameter
 var delete_record = function($scope, $http, id){
     var req_url;
 
     if($scope.is_deptMaster){
-       req_url = $http.delete('/deptmaster/' + id);
-    }
-    else if($scope.is_faculty){
-        req_url = $http.delete('/faculty/' + id);
-    }
-    else if($scope.is_courseMaster){
-        req_url = $http.delete('/coursemaster/' + id);
-    }
-
-    else{
-        req_url = $http.delete('/students/' + id)
-    }
-    req_url.success(function(response){
-        $scope.data = {};
-        $scope.searchkey.id = '';
-    })
+     req_url = $http.delete('/deptmaster/' + id);
+ }
+ else if($scope.is_faculty){
+    req_url = $http.delete('/faculty/' + id);
+}
+else if($scope.is_courseMaster){
+    req_url = $http.delete('/coursemaster/' + id);
 }
 
+else{
+    req_url = $http.delete('/students/' + id)
+}
+req_url.success(function(response){
+    $scope.data = {};
+    $scope.searchkey.id = '';
+})
+}
+
+//displays all records
 var show_record = function($scope, $http){
     var req_url;
     if($scope.is_deptMaster){
@@ -136,32 +141,33 @@ var show_record = function($scope, $http){
     })
 }
 
-
+// update record with id sent as parameter
 var update = function($scope, $http, id){
     var req_url;
   //  console.log($scope.data.id);
-    if($scope.is_deptMaster){
-        req_url = $http.put('/deptmaster/' + id, $scope.data)
-    }
-    else if($scope.is_faculty){
-        req_url = $http.put('/faculty/' + id, $scope.data)
-    }
+  if($scope.is_deptMaster){
+    req_url = $http.put('/deptmaster/' + id, $scope.data)
+}
+else if($scope.is_faculty){
+    req_url = $http.put('/faculty/' + id, $scope.data)
+}
 
-    else if($scope.is_courseMaster){
-        req_url = $http.put('/coursemaster/' + id, $scope.data)
-    }
+else if($scope.is_courseMaster){
+    req_url = $http.put('/coursemaster/' + id, $scope.data)
+}
 
-    else{
-        req_url = $http.put('/students/' +id, $scope.data);
-    }
+else{
+    req_url = $http.put('/students/' +id, $scope.data);
+}
 
-    req_url.success(function(response){
-        $scope.data = {};
-        $scope.searchkey = {};
-    });
+req_url.success(function(response){
+    $scope.data = {};
+    $scope.searchkey = {};
+});
 }
 
 
+// display profile of the id 
 var display_profile = function($scope, $http){
     var req_url;
     console.log($scope.searchkey.id);
@@ -170,22 +176,23 @@ var display_profile = function($scope, $http){
         req_url = $http.get('/deptmaster/' +id);
     }
     else if($scope.is_courseMaster){
-         req_url = $http.get('/coursemaster/' +id);
-    }
-    else if($scope.is_faculty){
-         req_url = $http.get('/faculty/' +id);
-    }
-    else{
-        req_url = $http.get('/students/' +id);
-    }
-
-    req_url.success(function(response){
-        console.log(response);
-        $scope.data = response;
-        $scope.searchkey.id = '';
-    })
+       req_url = $http.get('/coursemaster/' +id);
+   }
+   else if($scope.is_faculty){
+       req_url = $http.get('/faculty/' +id);
+   }
+   else{
+    req_url = $http.get('/students/' +id);
 }
 
+req_url.success(function(response){
+    console.log(response);
+    $scope.data = response;
+    $scope.searchkey.id = '';
+})
+}
+
+//get information to edit the form 
 var edit = function($scope, $http, id){
     var req_url;
     console.log(id);
@@ -208,6 +215,7 @@ var edit = function($scope, $http, id){
     });
 }
 
+//query
 var query = function($scope, $http){
     var req_url;
     console.log($scope.querykey);
@@ -234,13 +242,13 @@ var query = function($scope, $http){
 
 //child controller -- > will take care of the various calls to instructor, student etc.
 
-acPortal.controller('mainCtrl', ['$scope','$http', function($scope, $http){
-   
+acPortal.controller('mainCtrl', ['$scope','$http', '$window', function($scope, $http, $window){
+
 
 //---------------------For Departments --------Taking care of all HTML views------------\\
+
     //when record form to add data 
     $scope.showAddDepartments = function(){
-        $scope.eror_emptyadd = false;
         $scope.add_departments = true; //show the add record form 
         $scope.show_departments = false;
         $scope.delete_departments = false; //to fide the delete form with key text field
@@ -257,7 +265,6 @@ acPortal.controller('mainCtrl', ['$scope','$http', function($scope, $http){
         $scope.delete_departments = false; //to fide the delete form with key text field
         $scope.update_departments = false; //hide update form to enter search key
         $scope.query_departments =false;
-
         show_record($scope, $http); //call the display function
     }
 
@@ -293,7 +300,8 @@ acPortal.controller('mainCtrl', ['$scope','$http', function($scope, $http){
 
 
 
-//---------------------For Courses --------Taking care of all HTML views------------\\
+//---------------------For COURSES --------Taking care of all HTML views------------\\
+
     //when record form to add data 
     $scope.showAddCourses = function(){
         $scope.add_courses = true; //show the add record form 
@@ -345,7 +353,9 @@ acPortal.controller('mainCtrl', ['$scope','$http', function($scope, $http){
         $scope.query_courses = true;//show the query form (the advance search option)
     }
 
-//---------------------For Student Records --------Taking care of all HTML views------------\\
+
+//---------------------For STUDENT Records --------Taking care of all HTML views------------\\
+
     //when record form to add data 
     $scope.showAddStudents = function(){
         $scope.add_students = true; //show the add record form 
@@ -397,9 +407,9 @@ acPortal.controller('mainCtrl', ['$scope','$http', function($scope, $http){
         $scope.query_students = true;//show the query form (the advance search option)
     }
 
-//--------------------For faculty -- Taking care of all the html views--------------\\
+//--------------------For FACULTY -- Taking care of all the html views--------------\\
 
-    $scope.showAllFaculty = function(){
+$scope.showAllFaculty = function(){
         $scope.show_faculty = true; //display the list of all records
         $scope.add_faculty = false; //hide the add record data
         $scope.delete_faculty = false;//hide the delete form
@@ -448,123 +458,164 @@ acPortal.controller('mainCtrl', ['$scope','$http', function($scope, $http){
     }
 
 
+//------------------------Functions/ Operations----------------------\\
 
-//------------------------All the CRUD Functions----------------------\\
+    //array to store credit list
+    $scope.credit_list = [0, 1, 2, 3, 4, 5];
 
+    //array to store year list 
+    var year_list = new Date().getFullYear();
+    var range = [];
+    range.push(year_list);
+    for(var i=1;i<100;i++) {
+      range.push(year_list - i);
+  }
+  $scope.years_list = range;
 
+//list of degrees offered
+  $scope.degree_list = ["B.Tech", "M.Tech", "PhD", "Research Assistant", "B.Arch"];
+
+//department list
+var getDeptList = function(){
+    $scope.dpid_list =[];
+     var req_url = $http.get('/deptmaster');
+    req_url.success(function(response){
+        $scope.dpid_list = response;
+        console.log($scope.dpid_list);
+    });  
+}
+
+getDeptList(); //to create the list first time
+
+    //list for titles
+   // $scope.title_list = ["Mr.", "Ms.", "Mrs.", "Dr.(Mr)", "Dr.(Mrs.)", "Dr.(Ms.)", "Prof", "Asst. Prof", "Asst"]
+  
     //when add operation is to be performed. Executed to POST data entered in add record form
     $scope.add = function(){
-        if($scope.formData)
-            add_record($scope, $http);
-        else 
-            $scope.eror_emptyadd = true;
- //check this show_recrod if needed ---
-  //      show_record($scope, $http); //call the display function
+        add_record($scope, $http);
+        if($scope.is_deptMaster){getDeptList(); } //to update the list of department
     }
 
+    //to display profile 
     $scope.displayprofile = function(){
-         display_profile($scope, $http);
-    }
+       display_profile($scope, $http);
+   }
 
-    $scope.displayedit  = function(id){
-        edit($scope, $http, id);
+   // to display information of the record with id, on an editable form 
+   $scope.displayedit  = function(id){
+    edit($scope, $http, id);
 
-        if($scope.show_students || $scope.show_courses|| $scope.show_departments||$scope.show_faculty)
-            {
-                $scope.showUpdateButton = true;
-                $scope.showDeleteButton = true;
-                $scope.update_departments = true;
-                $scope.update_courses = true;
-                $scope.update_students = true;
+    if($scope.show_students || $scope.show_courses|| $scope.show_departments||$scope.show_faculty)
+    {
+        $scope.showUpdateButton = true;
+        $scope.showDeleteButton = true;
+        $scope.update_departments = true;
+        $scope.update_courses = true;
+        $scope.update_students = true;
+        $scope.update_faculty = true;
+
                 $scope.show_students = false; //hide the entire student list
                 $scope.show_courses = false; //hide the entire student list 
                 $scope.show_departments = false;
-             }
- 
-        else{
-             $scope.showUpdateButton = true;
-             $scope.showDeleteButton = false;
+                $scope.show_faculty = false; //hide the entire student list
+
+            }
+
+            else{
+               $scope.showUpdateButton = true;
+               $scope.showDeleteButton = false;
              $scope.show_students = false; //hide the entire student list
              $scope.show_courses = false; //hide the entire student list 
              $scope.show_departments = false;
             $scope.show_faculty = false; //hide the entire faculty list
 
-            }
+        }
     }
 
+    //delete a record
     $scope.delete = function(id){
-        delete_record($scope, $http, id);
-        show_record($scope, $http); //call the display function
+        //delete confirmation
+        deleteUser = $window.confirm('Are you sure you want to delete?');
+        if(deleteUser){
+            delete_record($scope, $http, id);
+            show_record($scope, $http); //call the display function  
+            if($scope.is_deptMaster){getDeptList(); } //to update the list of department
+
+        }
     }
 
+    //update record
     $scope.updaterecord = function(id){
         update($scope, $http, id);
         show_record($scope, $http); //call the display function
+        if($scope.is_deptMaster){getDeptList(); } //to update the list of department
+
     }
 
+    //perform search query
     $scope.querysearch = function(){
         var querykey = $scope.querykey;
         if($scope.is_courseMaster){
-                if(angular.isUndefined(querykey.crid))
-                   querykey.crid="" ;
-                if(angular.isUndefined(querykey.dpid))
-                   querykey.dpid="" ;
-                if(angular.isUndefined(querykey.coursename))
-                   querykey.coursename="" ;
-                if(angular.isUndefined(querykey.credits))
-                   querykey.credits= -1 ;
+            if(angular.isUndefined(querykey.crid))
+             querykey.crid="" ;
+         if(angular.isUndefined(querykey.dpid))
+             querykey.dpid="" ;
+         if(angular.isUndefined(querykey.coursename))
+             querykey.coursename="" ;
+         if(angular.isUndefined(querykey.credits))
+             querykey.credits= -1 ;
 
-               query($scope, $http);
+         query($scope, $http);
                $scope.show_courses = true; //to display the entire instructor list 
                $scope.query_courses = false;//show the query form (the advance search option)
 
-        }
-        else if($scope.is_faculty){
-                if(angular.isUndefined(querykey.name))
-                   querykey.name="" ;
-                if(angular.isUndefined(querykey.title))
-                   querykey.title="" ;
-                if(angular.isUndefined(querykey.fcid))
-                   querykey.fcid="" ;
-               if(angular.isUndefined(querykey.dpid))
-                   querykey.dpid="" ;
-               if(angular.isUndefined(querykey.emailid))
-                   querykey.emailid="" ;
-               if(angular.isUndefined(querykey.contactno))
-                   querykey.contactno="" ;
-                if(angular.isUndefined(querykey.areas))
-                   querykey.areas="" ;
+           }
+           else if($scope.is_faculty){
+            if(angular.isUndefined(querykey.name))
+             querykey.name="" ;
+         if(angular.isUndefined(querykey.title))
+             querykey.title="" ;
+         if(angular.isUndefined(querykey.fcid))
+             querykey.fcid="" ;
+         if(angular.isUndefined(querykey.dpid))
+             querykey.dpid="" ;
+         if(angular.isUndefined(querykey.emailid))
+             querykey.emailid="" ;
+         if(angular.isUndefined(querykey.contactno))
+             querykey.contactno="" ;
+         if(angular.isUndefined(querykey.areas))
+             querykey.areas="" ;
 
-               query($scope, $http);
+         query($scope, $http);
                $scope.show_faculty = true; //to display the entire faculty list 
                $scope.query_faculty = false;//hide the query form (the advance search option)
 
-        }
-        else if($scope.is_deptMaster){
+           }
+           else if($scope.is_deptMaster){
 
-                if(angular.isUndefined(querykey.id))
-                   querykey.id="" ;
-                if(angular.isUndefined(querykey.name))
-                   querykey.name="" ;
-               query($scope, $http);
+            if(angular.isUndefined(querykey.id))
+             querykey.id="" ;
+         if(angular.isUndefined(querykey.name))
+             querykey.name="" ;
+         query($scope, $http);
                $scope.show_departments = true; //to display the entire department list 
                $scope.query_departments = false;//hide the query form (the advance search option)
-        }
+           }
 
-        else{
+           else{
             if(angular.isUndefined(querykey.stid))
-                   querykey.stid="" ;
-                if(angular.isUndefined(querykey.name))
-                   querykey.name="" ;
-                if(angular.isUndefined(querykey.dpid))
-                   querykey.dpid="" ;
-                if(angular.isUndefined(querykey.year))
-                   querykey.year= -1 ;
-                if(angular.isUndefined(querykey.degree))
-                   querykey.degree="" ;
-               query($scope, $http);
+             querykey.stid="" ;
+         if(angular.isUndefined(querykey.name))
+             querykey.name="" ;
+         if(angular.isUndefined(querykey.dpid))
+             querykey.dpid="" ;
+         if(angular.isUndefined(querykey.year))
+             querykey.year= -1 ;
+         if(angular.isUndefined(querykey.degree))
+             querykey.degree="" ;
+         query($scope, $http);
                $scope.show_students = true; //to display the entire instructor list 
                $scope.query_students = false;//show the query form (the advance search option)
-        }
-    }
-}]);
+           }
+       }
+   }]);
