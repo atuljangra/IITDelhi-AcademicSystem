@@ -1,22 +1,23 @@
-<!DOCTYPE>
-<html ng-app="acPortal">
-<head>
-<meta charset="UTF-8">
-<title>Academic Portal</title>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+    <!DOCTYPE>
+    <html ng-app="acPortal">
+    <head>
+      <meta charset="UTF-8">
+      <title>Academic Portal</title>
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    </head>
 
-</head>
-
-<body>
-<nav id="myNavbar" class="navbar navbar-default navbar-inverse navbar-fixed-top" role="navigation">
-            <ul class="nav navbar-nav">
-                <li class="active"><a href='/' target="_blank">Infomation</a></li>
-            </ul>
-        </div>
+    <body>
+      <nav id="myNavbar" class="navbar navbar-default navbar-inverse navbar-fixed-top" role="navigation">
+        <ul class="nav navbar-nav">
+          <li class="active"><a href='/' target="_blank">Infomation</a></li>
+        </ul>
+      </div>
     </div>
-</nav>
-<div class="container"  ng-controller ="parentCtrl">
+  </nav>
+  <div class="container"  ng-controller ="parentCtrl">
     <div class="jumbotron">
       <a class="btn btn-primary btn-lg" ng-click="select_deptMaster()">Departments</a>
       <a class="btn btn-primary btn-lg" ng-click="select_courseMaster()">Courses</a>
@@ -26,317 +27,342 @@
     </div>
     <div class="row" ng-controller="mainCtrl">
 
-            <!-- start of DEPARTMENT MASTER  HTML -->
-                <div class="container" ng-show="is_deptMaster">
-                        <div class="row">
-                          <div class="col-md-2">
-                            <ul class="nav nav-pills nav-stacked">
-                              <!--Butttons for differnt operations -->
-                              <li><a href ng-click="showAllDepartments()">All Departments</a></li>
-                              <li><a href ng-click="showAddDepartments()">Add Department</a></li>
-                              <li><a href ng-click="updateDepartments()">Update Department</a></li>
-                              <li><a href ng-click="deleteDepartments()">Delete Department</a></li>
-                              <li><a href ng-click="queryDepartments()">Query</a></li>
-                            </ul>
-                          </div>
-                          <div class="col-md-10">
- 
+      <!-- start of DEPARTMENT MASTER  HTML -->
+      <div class="container" ng-show="is_deptMaster">
+        <div class="row">
+          <div class="col-md-2">
+            <ul class="nav nav-pills nav-stacked">
+              <!--Butttons for differnt operations -->
+              <li><a href ng-click="showAllDepartments()">All Departments</a></li>
+              <li><a href ng-click="showAddDepartments()">Add Department</a></li>
+              <li><a href ng-click="updateDepartments()">Update Department</a></li>
+              <li><a href ng-click="deleteDepartments()">Delete Department</a></li>
+              <li><a href ng-click="queryDepartments()">Query</a></li>
+            </ul>
+          </div>
+          <div class="col-md-10">
+
                                 <!-- Add a new course. Will only be displayed when add_courses=true-->
-                                  <div class="container" ng-show="add_departments">
-                                      <form class="form-horizontal" role="form">
-                                        <h2>Add a New Record</h2>
+                                <div class="container" ng-show="add_departments">
+                                  <form class="form-horizontal" role="form" name="add_dept" novalidate>
+                                    <h2>Add a New Record</h2>
 
-                                          <div class="form-group">
-                                            <label class="control-label col-sm-2">Department Id</label>
-                                            <div class="col-sm-6">
-                                              <input type="text" class="form-control" ng-model="formData.dpid" placeholder="Eg. CSE">
-                                            </div>
-                                          </div>
-                                          <div class="form-group">
-                                            <label class="control-label col-sm-2">Department Name</label>
-                                            <div class="col-sm-6">
-                                              <input type="text" class="form-control" ng-model="formData.deptname" placeholder="Eg. Computer Science and Engineering">
-                                            </div>
-                                          </div>
-                                          <div class="form-group">        
-                                            <div class="col-sm-offset-2 col-sm-10">
-                                              <button class="btn btn-primary" ng-click="add()"> Add Department</button>
-                                            </div>
-                                          </div>
-                                      </form>
-                                </div>
-
-
-
-                            <!--To show all course records. They will be displayed only when      show_Inst=true
-                            All other forms and screens will be hidden -->
-                              <table class="table table-striped" ng-show="show_departments">
-                                  <thead>
-                                      <tr>
-                                              <th>Department ID</th> 
-                                              <th>Department Name</th>
-                                              <th></th>
-                                              <th></th>
-                                      </tr>   
-                                  </thead>
-                                  <tbody>
-                                      <tr ng-repeat = "data in full_list">
-                                              <td>{{data.dpid}}</td>
-                                              <td>{{data.deptname}}</td>
-                                              <td><button class="btn btn-primary" ng-click="displayedit(data.dpid)"> Open Record</button></td>
-                                      </tr>
-                                  </tbody>
-                              </table>
-
-                            <!-- The table shows full profile of the person whose record you want to delete by entering the searchkey-->
-
-                            <table class="table table-striped" ng-show="delete_departments">
-                                      <tr class="form-group">
-                                            <th><label class="control-label col-sm-6">Department ID</label></th>
-                                            <td class="col-sm-3"> <input type="text" class="form-control"  ng-model="searchkey.id" placeholder="Eg. U10112"></td>
-                                            <td><button class="btn btn-primary" ng-click="displayprofile()"> Find Department</button></td>
-                                      </tr>
-                                      <tr>
-                                              <th>Department ID</th>
-                                              <td>{{data.dpid}}</td>
-                                      </tr>                                        
-                                      <tr>
-                                              <th>Department Name</th>
-                                              <td>{{data.deptname}}</td>
-                                      </tr>  
-                                      <tr>
-                                              <td><button class="btn btn-danger" ng-click="delete(data.dpid)">Delete Record</button></td>
-                                      </tr>
-                             </table>
-
-                            <!--Will show the information of the profile to be updated according to the key entered -->
-                            <div class="container" ng-show="update_departments">
-                                <form class="form-horizontal" role="form">
-                                    <h2>Update the Record</h2>
-                                    <div class="form-group" ng-show="!data.dpid">
-                                      <label class="control-label col-sm-2">Enter ID </label>
-                                      <div class="col-sm-3">
-                                        <input type="text" class="form-control" ng-model="searchkey.id" placeholder="Eg. U10112">
-                                      </div>
-                                      <div class="col-sm-3">
-                                        <button class="btn btn-primary" ng-click="displayedit(searchkey.id)"> Find this Record</button>
+                                    <div class="form-group">
+                                      <label class="control-label col-sm-2">Department Id</label>
+                                      <div class="col-sm-6">
+                                        <input type="text" name="dpid" class="form-control" ng-model="formData.dpid" placeholder="Eg. CSE" required>
+                                        <p ng-show="add_dept.dpid.$invalid && !add_dept.dpid.$pristine" class="help-block">Department ID is required.</p>
                                       </div>
                                     </div>
                                     <div class="form-group">
-                                        <label class="control-label col-sm-2">Department ID</label>
-                                        <div class="col-sm-6">          
-                                          <input type="text" class="form-control"  disabled ng-model="data.dpid">
-                                        </div>
-                                    </div>
-                                      <div class="form-group">
-                                        <label class="control-label col-sm-2">Department Name</label>
-                                        <div class="col-sm-6">          
-                                          <input type="text" class="form-control"  ng-model="data.deptname">
-                                        </div>
-                                      </div>
-                                      <div class="form-group">        
-                                        <div class="col-sm-offset-2 col-sm-10">
-                                         <td><button class="btn btn-info" ng-show="showUpdateButton" ng-click="updaterecord(data.dpid)">Update</button></td>
-                                         <td><button class="btn btn-danger" ng-show="showDeleteButton"ng-click="delete(dpid)">Delete Record</button></td>
-                                        </div>
-                                      </div>
-                                </form>
-                            </div>
-
-
-                            <!--Query option will display the form with various fields to query on. The output will the list of the similar records. The query form will be displayed only when query_inst=true -->
-                            <form class="form-horizontal" role="form" ng-show = "query_departments">
-                                  <h2>Query Search</h2>
-                                  <br>
-                                    <div class="form-group">
-                                      <label class="control-label col-sm-2">Enter ID</label>
-                                      <div class="col-sm-3">
-                                        <input type="text" class="form-control" ng-model="querykey.id">
-                                      </div>
-                                    </div>
-                                    <div class="form-group">
-                                      <label class="control-label col-sm-2">Enter Department Name</label>
-                                      <div class="col-sm-3">
-                                        <input type="text" class="form-control" ng-model="querykey.name">
+                                      <label class="control-label col-sm-2">Department Name</label>
+                                      <div class="col-sm-6">
+                                        <input type="text" name="deptname" class="form-control" ng-model="formData.deptname" placeholder="Eg. Computer Science and Engineering" required>
+                                        <p ng-show="add_dept.deptname.$invalid && !add_dept.deptname.$pristine" class="help-block">Department Name is required.</p>
                                       </div>
                                     </div>
                                     <div class="form-group">        
                                       <div class="col-sm-offset-2 col-sm-10">
-                                        <button class="btn btn-primary" ng-click="querysearch()" > Find this record</button>
+                                        <button class="btn btn-primary" ng-disabled="add_dept.$invalid" ng-click="add()"> Add Department</button>
                                       </div>
                                     </div>
-                            </form>
-
-                            </div>
-
-                            </div>
-                          </div>
-                          <!-- End of deptMaster HTML -->
-
-            <!-- start of COURSE MASTER  HTML -->
-                <div class="container" ng-show="is_courseMaster">
-                        <div class="row">
-                          <div class="col-md-2">
-                            <ul class="nav nav-pills nav-stacked">
-                              <!--Butttons for differnt operations -->
-                              <li><a href ng-click="showAllCourses()">All Courses</a></li>
-                              <li><a href ng-click="showAddCourses()">Add Courses</a></li>
-                              <li><a href ng-click="updateCourses()">Update Courses</a></li>
-                              <li><a href ng-click="deleteCourses()">Delete Courses</a></li>
-                              <li><a href ng-click="queryCourses()">Query</a></li>
-                            </ul>
-                          </div>
-                          <div class="col-md-10">
- 
-                                <!-- Add a new course. Will only be displayed when add_courses=true-->
-                                  <div class="container" ng-show="add_courses">
-                                      <form class="form-horizontal" role="form">
-                                        <h2>Add a New Course</h2>
-
-                                          <div class="form-group">
-                                            <label class="control-label col-sm-2">Course Id</label>
-                                            <div class="col-sm-6">
-                                              <input type="text" class="form-control" ng-model="formData.crid" placeholder="Eg. CSE101">
-                                            </div>
-                                          </div>
-
-                                          <div class="form-group">
-                                            <label class="control-label col-sm-2">Department Id</label>
-                                            <div class="col-sm-6">
-                                              <input type="text" class="form-control" ng-model="formData.dpid" placeholder="Eg. CSE">
-                                            </div>
-                                          </div>
-
-                                          <div class="form-group">
-                                            <label class="control-label col-sm-2">Course Name</label>
-                                            <div class="col-sm-6">
-                                              <input type="text" class="form-control" ng-model="formData.coursename" placeholder="Eg. Introdunction to Programming">
-                                            </div>
-                                          </div>                                                                                    
-                                          <div class="form-group">
-                                            <label class="control-label col-sm-2">Course Credits</label>
-                                            <div class="col-sm-6">
-                                              <input type="text" class="form-control" ng-model="formData.credits" placeholder="Eg. 4">
-                                            </div>
-                                          </div>
-                                          <div class="form-group">
-                                            <label class="control-label col-sm-2">Course Pre Req</label>
-                                            <div class="col-sm-6">
-                                              <input type="text" class="form-control" ng-model="formData.pre_req1" placeholder="CS101">
-                                              <input type="text" class="form-control" ng-model="formData.pre_req2" placeholder="CS101">
-                                              <input type="text" class="form-control" ng-model="formData.pre_req3" placeholder="CS101">
-                                              <input type="text" class="form-control" ng-model="formData.pre_req4" placeholder="CS101">
-                                            </div>
-                                          </div>                                          
-                                          <div class="form-group">        
-                                            <div class="col-sm-offset-2 col-sm-10">
-                                              <button class="btn btn-primary" ng-click="add()"> Add Course</button>
-                                            </div>
-                                          </div>
-                                      </form>
+                                  </form>
                                 </div>
 
 
 
-
-                            <!--To show all course records. They will be displayed only when      show_Inst=true
-                            All other forms and screens will be hidden -->
-                              <table class="table table-striped" ng-show="show_courses">
+                                <!--To show all course records. They will be displayed only when      show_Inst=true
+                                All other forms and screens will be hidden -->
+                                <table class="table table-striped" ng-show="show_departments">
                                   <thead>
-                                      <tr>
-                                              <th>Course ID</th> 
-                                              <th>Department ID</th>
-                                              <th>Course Name</th> 
-                                              <th>Credits</th>
-                                              <th>Pre-Req</th> 
-                                              <th></th>
-                                              <th></th> 
-                                              <th></th>
-                                              <th></th>
-                                              <th></th>
-                                      </tr>   
+                                    <tr>
+                                      <th>Department ID</th> 
+                                      <th>Department Name</th>
+                                      <th></th>
+                                      <th></th>
+                                    </tr>   
                                   </thead>
                                   <tbody>
-                                      <tr ng-repeat = "data in full_list">
-                                              <td>{{data.crid}}</td>
-                                              <td>{{data.dpid}}</td>
-                                              <td>{{data.coursename}}</td>
-                                              <td>{{data.credits}}</td>
-                                              <td>{{data.pre_req1}}  
-                                              {{data.pre_req2}}
-                                              {{data.pre_req3}}
-                                              {{data.pre_req4}}</td>
-                                              <td><button class="btn btn-primary" ng-click="displayedit(data.crid)"> Open Record</button></td>
-                                      </tr>
+                                    <tr ng-repeat = "data in full_list">
+                                      <td>{{data.dpid}}</td>
+                                      <td>{{data.deptname}}</td>
+                                      <td><button class="btn btn-primary" ng-click="displayedit(data.dpid)"> Open Record</button></td>
+                                    </tr>
                                   </tbody>
-                              </table>
+                                </table>
 
-                            <!-- The table shows full profile of the person whose record you want to delete by entering the searchkey-->
+                                <!-- The table shows full profile of the person whose record you want to delete by entering the searchkey-->
+                                <div ng-show="delete_departments">
+                                  <form class="form-horizontal" role="form" name="del_dept" novalidate>
+                                    <h2>Add a New Record</h2>
 
-                            <table class="table table-striped" ng-show="delete_courses">
-                                      <tr class="form-group">
-                                            <th><label class="control-label col-sm-6">Course ID</label></th>
-                                            <td class="col-sm-3"> <input type="text" class="form-control"  ng-model="searchkey.id" placeholder="Eg. CSE101"></td>
-                                            <td><button class="btn btn-primary" ng-click="displayprofile()"> Find Course</button></td>
-                                      </tr>
-                                      <tr>
-                                              <th>Course ID</th>
-                                              <td>{{data.crid}}</td>
-                                      </tr>                                        
-                                      <tr>
-                                              <th>Department ID</th>
-                                              <td>{{data.dpid}}</td>
-                                      </tr>  
-                                      <tr>
-                                              <th>Course Name</th>
-                                              <td>{{data.coursename}}</td>
-                                      </tr>
-                                      <tr>
-                                              <th>Credits</th>
-                                              <td>{{data.credits}}</td>
-                                      </tr>   
-                                      <tr>
-                                              <td><button class="btn btn-danger" ng-click="delete(data.crid)">Delete Record</button></td>
-                                      </tr>
-                             </table>
+                                    <div class="form-group">
+                                      <label class="control-label col-sm-2">* Department Id</label>
+                                      <div class="col-sm-6">
+                                        <input type="text" name="dpid" class="form-control"  ng-model="searchkey.id" placeholder="Eg. CSE" required>
+                                        <p ng-show="del_dept.dpid.$invalid && !del_dept.dpid.$pristine" class="help-block">Department ID is required.</p>
+                                      </div>
+                                      <button class="btn btn-primary" ng-disabled="del_dept.$invalid" ng-click="displayprofile()"> Find Department</button>
+                                    </div>
+                                  </form>
+                                  <table class="table table-striped" ng-show="delete_departments">
+                                    <tr>
+                                      <th>Department ID</th>
+                                      <td>{{data.dpid}}</td>
+                                    </tr>                                        
+                                    <tr>
+                                      <th>Department Name</th>
+                                      <td>{{data.deptname}}</td>
+                                    </tr>  
+                                    <tr>
+                                      <td><button class="btn btn-danger"  ng-click="delete(data.dpid)">Delete Record</button></td>
+                                    </tr>
+                                  </table>
+                                </div>
 
-                            <!--Will show the information of the profile to be updated according to the key entered -->
-                            <div class="container" ng-show="update_courses">
-                                <form class="form-horizontal" role="form">
+                                <!--Will show the information of the profile to be updated according to the key entered -->
+                                <div class="container" ng-show="update_departments">
+                                  <form class="form-horizontal" role="form" name="up_dept">
                                     <h2>Update the Record</h2>
-                                    <div class="form-group" ng-show="!data.crid">
-                                      <label class="control-label col-sm-2">Enter Course ID </label>
+                                    <div class="form-group" ng-show="!data.dpid">
+                                      <label class="control-label col-sm-2">Enter ID </label>
                                       <div class="col-sm-3">
-                                        <input type="text" class="form-control" ng-model="searchkey.id" placeholder="Eg. U10112">
+                                        <input type="text" class="form-control" ng-model="searchkey.id" placeholder="Eg. CSE" required>
+                                        <p ng-show="up_dept.dpid.$invalid && !up_dept.dpid.$pristine" class="help-block">Department ID is required.</p>
                                       </div>
                                       <div class="col-sm-3">
-                                        <button class="btn btn-primary" ng-click="displayedit(searchkey.id)"> Find this Record</button>
+                                        <button class="btn btn-primary" ng-disabled="up_dept.$invalid" ng-click="displayedit(searchkey.id)"> Find this Record</button>
                                       </div>
                                     </div>
                                     <div class="form-group">
+                                      <label class="control-label col-sm-2">Department ID</label>
+                                      <div class="col-sm-6">          
+                                        <input type="text" class="form-control"  disabled ng-model="data.dpid">
+                                      </div>
+                                    </div>
+                                    <div class="form-group">
+                                      <label class="control-label col-sm-2">Department Name</label>
+                                      <div class="col-sm-6">          
+                                        <input type="text" class="form-control"  ng-model="data.deptname" required>
+                                      </div>
+                                    </div>
+                                    <div class="form-group">        
+                                      <div class="col-sm-offset-2 col-sm-10">
+                                       <td><button class="btn btn-info" ng-show="showUpdateButton" ng-click="updaterecord(data.dpid)">Update</button></td>
+                                       <td><button class="btn btn-danger" ng-show="showDeleteButton"ng-click="delete(dpid)">Delete Record</button></td>
+                                     </div>
+                                   </div>
+                                 </form>
+                               </div>
+
+
+                               <!--Query option will display the form with various fields to query on. The output will the list of the similar records. The query form will be displayed only when query_inst=true -->
+                               <form class="form-horizontal" role="form" ng-show = "query_departments">
+                                <h2>Query Search</h2>
+                                <br>
+                                <div class="form-group">
+                                  <label class="control-label col-sm-2">Enter ID</label>
+                                  <div class="col-sm-3">
+                                    <input type="text" class="form-control" ng-model="querykey.id">
+                                  </div>
+                                </div>
+                                <div class="form-group">
+                                  <label class="control-label col-sm-2">Enter Department Name</label>
+                                  <div class="col-sm-3">
+                                    <input type="text" class="form-control" ng-model="querykey.name">
+                                  </div>
+                                </div>
+                                <div class="form-group">        
+                                  <div class="col-sm-offset-2 col-sm-10">
+                                    <button class="btn btn-primary" ng-click="querysearch()" > Find this record</button>
+                                  </div>
+                                </div>
+                              </form>
+
+                            </div>
+
+                          </div>
+                        </div>
+                        <!-- End of deptMaster HTML -->
+
+                        <!-- start of COURSE MASTER  HTML -->
+                        <div class="container" ng-show="is_courseMaster">
+                          <div class="row">
+                            <div class="col-md-2">
+                              <ul class="nav nav-pills nav-stacked">
+                                <!--Butttons for differnt operations -->
+                                <li><a href ng-click="showAllCourses()">All Courses</a></li>
+                                <li><a href ng-click="showAddCourses()">Add Courses</a></li>
+                                <li><a href ng-click="updateCourses()">Update Courses</a></li>
+                                <li><a href ng-click="deleteCourses()">Delete Courses</a></li>
+                                <li><a href ng-click="queryCourses()">Query</a></li>
+                              </ul>
+                            </div>
+                            <div class="col-md-10">
+
+                              <!-- Add a new course. Will only be displayed when add_courses=true-->
+                              <div class="container" ng-show="add_courses">
+                                <form class="form-horizontal" role="form" name="add_course">
+                                  <h2>Add a New Course</h2>
+
+                                  <div class="form-group">
+                                    <label class="control-label col-sm-2">* Course Id</label>
+                                    <div class="col-sm-6">
+                                      <input type="text" class="form-control" ng-model="formData.crid" placeholder="Eg. CSE101" required name="crid">
+                                      <p ng-show="add_course.crid.$invalid && !add_course.crid.$pristine" class="help-block">Course ID is required.</p>
+                                    </div>
+                                  </div>
+
+                                  <div class="form-group">
+                                    <label class="control-label col-sm-2">* Department Id</label>
+                                    <div class="col-sm-6">
+                                      <input type="text" class="form-control" ng-model="formData.dpid" placeholder="Eg. CSE" required name="dpid">
+                                      <p ng-show="add_course.dpid.$invalid && !add_course.dpid.$pristine" class="help-block">Department ID is required.</p>
+                                    </div>
+                                  </div>
+
+                                  <div class="form-group">
+                                    <label class="control-label col-sm-2">* Course Name</label>
+                                    <div class="col-sm-6">
+                                      <input type="text" class="form-control" ng-model="formData.coursename" placeholder="Eg. Introdunction to Programming" required name="coursename">
+                                      <p ng-show="add_course.coursename.$invalid && !add_course.coursename.$pristine" class="help-block">Course name is required.</p>
+                                    </div>
+                                  </div>                                                                                    
+                                  <div class="form-group">
+                                    <label class="control-label col-sm-2">* Course Credits</label>
+                                    <div class="col-sm-6">
+                                      <input type="text" class="form-control" ng-model="formData.credits" placeholder="Eg. 4" required name="credits">
+                                      <p ng-show="add_course.credits.$invalid && !add_course.credits.$pristine" class="help-block">Course Credit is required.</p>
+                                    </div>
+                                  </div>
+                                  <div class="form-group">
+                                    <label class="control-label col-sm-2">Course Pre Req</label>
+                                    <div class="col-sm-6">
+                                      <input type="text" class="form-control" ng-model="formData.pre_req1" placeholder="CS101">
+                                      <input type="text" class="form-control" ng-model="formData.pre_req2" placeholder="CS101">
+                                      <input type="text" class="form-control" ng-model="formData.pre_req3" placeholder="CS101">
+                                      <input type="text" class="form-control" ng-model="formData.pre_req4" placeholder="CS101">
+                                    </div>
+                                  </div>                                          
+                                  <div class="form-group">        
+                                    <div class="col-sm-offset-2 col-sm-10">
+                                      <button class="btn btn-primary" ng-disabled="add_course.$invalid" ng-click="add()"> Add Course</button>
+                                    </div>
+                                  </div>
+                                </form>
+                              </div>
+
+
+
+
+                                <!--To show all course records. They will be displayed only when      show_Inst=true
+                                All other forms and screens will be hidden -->
+                                <table class="table table-striped" ng-show="show_courses">
+                                  <thead>
+                                    <tr>
+                                      <th>Course ID</th> 
+                                      <th>Department ID</th>
+                                      <th>Course Name</th> 
+                                      <th>Credits</th>
+                                      <th>Pre-Req</th> 
+                                      <th></th>
+                                      <th></th> 
+                                      <th></th>
+                                      <th></th>
+                                      <th></th>
+                                    </tr>   
+                                  </thead>
+                                  <tbody>
+                                    <tr ng-repeat = "data in full_list">
+                                      <td>{{data.crid}}</td>
+                                      <td>{{data.dpid}}</td>
+                                      <td>{{data.coursename}}</td>
+                                      <td>{{data.credits}}</td>
+                                      <td>{{data.pre_req1}}  
+                                        {{data.pre_req2}}
+                                        {{data.pre_req3}}
+                                        {{data.pre_req4}}</td>
+                                        <td><button class="btn btn-primary" ng-click="displayedit(data.crid)"> Open Record</button></td>
+                                      </tr>
+                                    </tbody>
+                                  </table>
+
+                                  <!-- The table shows full profile of the person whose record you want to delete by entering the searchkey-->
+                                  <div ng-show="delete_courses">
+                                 
+                                    <form class="form-horizontal" role="form" name="del_courses" novalidate>
+                                    <h2>Delete a Record</h2>
+
+                                    <div class="form-group">
+                                      <label class="control-label col-sm-2">* Course Id</label>
+                                      <div class="col-sm-6">
+                                        <input type="text" name="crid" class="form-control"  ng-model="searchkey.id" placeholder="Eg. CSE" required>
+                                        <p ng-show="del_courses.crid.$invalid && !del_courses.crid.$pristine" class="help-block">Course ID is required.</p>
+                                      </div>
+                                      <button class="btn btn-primary" ng-disabled="del_courses.$invalid" ng-click="displayprofile()"> Find Course</button>
+                                    </div>
+                                  </form>
+                                  <table class="table table-striped" >
+                                    <tr>
+                                      <th>Course ID</th>
+                                      <td>{{data.crid}}</td>
+                                    </tr>                                        
+                                    <tr>
+                                      <th>Department ID</th>
+                                      <td>{{data.dpid}}</td>
+                                    </tr>  
+                                    <tr>
+                                      <th>Course Name</th>
+                                      <td>{{data.coursename}}</td>
+                                    </tr>
+                                    <tr>
+                                      <th>Credits</th>
+                                      <td>{{data.credits}}</td>
+                                    </tr>   
+                                    <tr>
+                                      <td><button class="btn btn-danger" ng-click="delete(data.crid)">Delete Record</button></td>
+                                    </tr>
+                                  </table>
+                                 </div> 
+
+                                  <!--Will show the information of the profile to be updated according to the key entered -->
+                                  <div class="container" ng-show="update_courses">
+                                    <form class="form-horizontal" role="form" name="up_courses">
+                                      <h2>Update the Record</h2>
+                                      <div class="form-group" ng-show="!data.crid">
+                                        <label class="control-label col-sm-2">* Course ID </label>
+                                        <div class="col-sm-3">
+                                          <input type="text" class="form-control" ng-model="searchkey.id" placeholder="Eg. U10112" required name="crid">
+                                          <p ng-show="up_courses.crid.$invalid && !up_courses.crid.$pristine" class="help-block">Course ID is required.</p>
+                                        </div>
+                                        <div class="col-sm-3">
+                                          <button class="btn btn-primary" ng-disabled="up_courses.$invalid" ng-click="displayedit(searchkey.id)"> Find course</button>
+                                        </div>
+                                      </div>
+                                      <div class="form-group">
                                         <label class="control-label col-sm-2">Course ID</label>
                                         <div class="col-sm-6">          
                                           <input type="text" class="form-control"  disabled ng-model="data.crid">
                                         </div>
-                                    </div>
-                                    <div class="form-group">
+                                      </div>
+                                      <div class="form-group">
                                         <label class="control-label col-sm-2">Department ID ID</label>
                                         <div class="col-sm-6">          
                                           <input type="text" class="form-control" ng-model="data.dpid">
                                         </div>
-                                    </div>
-                                    <div class="form-group">
+                                      </div>
+                                      <div class="form-group">
                                         <label class="control-label col-sm-2">Course Name</label>
                                         <div class="col-sm-6">          
                                           <input type="text" class="form-control"  ng-model="data.coursename">
                                         </div>
-                                    </div>
-                                    <div class="form-group">
+                                      </div>
+                                      <div class="form-group">
                                         <label class="control-label col-sm-2">Credits</label>
                                         <div class="col-sm-6">          
                                           <input type="text" class="form-control" ng-model="data.credits">
                                         </div>
-                                    </div>
+                                      </div>
 
                                       <div class="form-group">
                                         <label class="control-label col-sm-2">Pre-Requisites</label>
@@ -352,48 +378,48 @@
                                         <div class="col-sm-offset-2 col-sm-10">
                                          <td><button class="btn btn-info" ng-show="showUpdateButton" ng-click="updaterecord(data.crid)">Update</button></td>
                                          <td><button class="btn btn-danger" ng-show="showDeleteButton"ng-click="delete(data.crid)">Delete Record</button></td>
-                                        </div>
-                                      </div>
-                                </form>
-                            </div>
+                                       </div>
+                                     </div>
+                                   </form>
+                                 </div>
 
 
-                            <!--Query option will display the form with various fields to query on. The output will the list of the similar records. The query form will be displayed only when query_inst=true -->
-                            <form class="form-horizontal" role="form" ng-show = "query_courses">
+                                 <!--Query option will display the form with various fields to query on. The output will the list of the similar records. The query form will be displayed only when query_inst=true -->
+                                 <form class="form-horizontal" role="form" ng-show = "query_courses">
                                   <h2>Query Search</h2>
                                   <br>
-                                    <div class="form-group">
-                                      <label class="control-label col-sm-2">Course ID</label>
-                                      <div class="col-sm-3">
-                                        <input type="text" class="form-control" ng-model="querykey.crid">
-                                      </div>
+                                  <div class="form-group">
+                                    <label class="control-label col-sm-2">Course ID</label>
+                                    <div class="col-sm-3">
+                                      <input type="text" class="form-control" ng-model="querykey.crid">
                                     </div>
-                                    <div class="form-group">
-                                      <label class="control-label col-sm-2">Department ID</label>
-                                      <div class="col-sm-3">
-                                        <input type="text" class="form-control" ng-model="querykey.dpid">
-                                      </div>
+                                  </div>
+                                  <div class="form-group">
+                                    <label class="control-label col-sm-2">Department ID</label>
+                                    <div class="col-sm-3">
+                                      <input type="text" class="form-control" ng-model="querykey.dpid">
                                     </div>
-                                    <div class="form-group">
-                                      <label class="control-label col-sm-2">Course Name</label>
-                                      <div class="col-sm-3">
-                                        <input type="text" class="form-control" ng-model="querykey.coursename">
-                                      </div>
+                                  </div>
+                                  <div class="form-group">
+                                    <label class="control-label col-sm-2">Course Name</label>
+                                    <div class="col-sm-3">
+                                      <input type="text" class="form-control" ng-model="querykey.coursename">
                                     </div>
-                                    <div class="form-group">
-                                      <label class="control-label col-sm-2">Course Credits</label>
-                                      <div class="col-sm-3">
-                                        <input type="text" class="form-control" ng-model="querykey.credits">
-                                      </div>
+                                  </div>
+                                  <div class="form-group">
+                                    <label class="control-label col-sm-2">Course Credits</label>
+                                    <div class="col-sm-3">
+                                      <input type="text" class="form-control" ng-model="querykey.credits">
                                     </div>
-                                    <div class="form-group">        
-                                      <div class="col-sm-offset-2 col-sm-10">
-                                        <button class="btn btn-primary" ng-click="querysearch()" > Find this record</button>
-                                      </div>
+                                  </div>
+                                  <div class="form-group">        
+                                    <div class="col-sm-offset-2 col-sm-10">
+                                      <button class="btn btn-primary" ng-click="querysearch()" > Find this record</button>
                                     </div>
-                            </form>
+                                  </div>
+                                </form>
 
-                            </div>
+                              </div>
 
                             </div>
                           </div>
@@ -402,302 +428,597 @@
 
 
 
-            <!-- start of Student  HTML -->
-                <div class="container" ng-show="is_students">
-                        <div class="row">
-                          <div class="col-md-2">
-                            <ul class="nav nav-pills nav-stacked">
-                              <!--Butttons for differnt operations -->
-                              <li><a href ng-click="showAllStudents()">All Students</a></li>
-                              <li><a href ng-click="showAddStudents()">Add Students</a></li>
-                              <li><a href ng-click="updateStudents()">Update Students</a></li>
-                              <li><a href ng-click="deleteStudents()">Delete Students</a></li>
-                              <li><a href ng-click="queryStudents()">Query</a></li>
-                            </ul>
-                          </div>
-                          <div class="col-md-10">
- 
+                          <!-- start of Student  HTML -->
+                          <div class="container" ng-show="is_students">
+                            <div class="row">
+                              <div class="col-md-2">
+                                <ul class="nav nav-pills nav-stacked">
+                                  <!--Butttons for differnt operations -->
+                                  <li><a href ng-click="showAllStudents()">All Students</a></li>
+                                  <li><a href ng-click="showAddStudents()">Add Students</a></li>
+                                  <li><a href ng-click="updateStudents()">Update Students</a></li>
+                                  <li><a href ng-click="deleteStudents()">Delete Students</a></li>
+                                  <li><a href ng-click="queryStudents()">Query</a></li>
+                                </ul>
+                              </div>
+                              <div class="col-md-10">
+
                                 <!-- Add a new course. Will only be displayed when add_courses=true-->
-                                  <div class="container" ng-show="add_students">
-                                      <form class="form-horizontal" role="form">
-                                        <h2>Add a New Course</h2>
+                                <div class="container" ng-show="add_students">
+                                  <form class="form-horizontal" role="form" name="add_stud">
+                                    <h2>Add a New Student</h2>
 
-                                          <div class="form-group">
-                                            <label class="control-label col-sm-2">Student Id</label>
-                                            <div class="col-sm-6">
-                                              <input type="text" class="form-control" ng-model="formData.stid" placeholder="Eg. 2016ECE01">
-                                            </div>
-                                          </div>
+                                    <div class="form-group">
+                                      <label class="control-label col-sm-2">Student Id</label>
+                                      <div class="col-sm-6">
+                                        <input type="text" class="form-control" ng-model="formData.stid" placeholder="Eg. 2016ECE01" required name="stid">
+                                        <p ng-show="add_stud.stid.$invalid && !add_stud.stid.$pristine" class="help-block">Student ID is required.</p>
+                                      </div>
+                                    </div>
 
-                                          <div class="form-group">
-                                            <label class="control-label col-sm-2">Student Name</label>
-                                            <div class="col-sm-6">
-                                              <input type="text" class="form-control" ng-model="formData.name" placeholder="Eg. Mr/Ms. Firstname Lastname">
-                                            </div>
-                                          </div>
+                                    <div class="form-group">
+                                      <label class="control-label col-sm-2">Student Name</label>
+                                      <div class="col-sm-6">
+                                        <input type="text" class="form-control" ng-model="formData.name" placeholder="Eg. Firstname Lastname" required name="name">
+                                        <p ng-show="add_stud.name.$invalid && !add_stud.name.$pristine" class="help-block">Student Name is required.</p> 
+                                      </div>
+                                    </div>
 
-                                          <div class="form-group">
-                                            <label class="control-label col-sm-2">Department ID</label>
-                                            <div class="col-sm-6">
-                                              <input type="text" class="form-control" ng-model="formData.dpid" placeholder="Eg. CSE">
-                                            </div>
-                                          </div>                                                                                    
-                                          <div class="form-group">
-                                            <label class="control-label col-sm-2">Year Enrolled</label>
-                                            <div class="col-sm-6">
-                                              <input type="text" class="form-control" ng-model="formData.year" placeholder="Eg. 4">
-                                            </div>
-                                          </div>    
-                                          <div class="form-group">
-                                            <label class="control-label col-sm-2">Degree</label>
-                                            <div class="col-sm-6">
-                                              <input type="text" class="form-control" ng-model="formData.degree" placeholder="Eg. 4">
-                                            </div>
-                                          </div>          
-                                          <div class="form-group">
-                                            <label class="control-label col-sm-2">Address</label>
-                                            <div class="col-sm-6">
-                                              <textarea class="form-control" rows="5" ng-model="formData.address"></textarea>
-                                            </div>
-                                          </div>       
-                                          <div class="form-group">
-                                            <label class="control-label col-sm-2">E-mail ID</label>
-                                            <div class="col-sm-6">
-                                              <input type="text" class="form-control" ng-model="formData.emailid" placeholder="Eg. 4">
-                                            </div>
-                                          </div>                        
-                                          <div class="form-group">
-                                            <label class="control-label col-sm-2">Contact Number</label>
-                                            <div class="col-sm-6">
-                                              <input type="text" class="form-control" ng-model="formData.contactno" placeholder="Eg. 4">
-                                            </div>
-                                          </div>  
-                                          <div class="form-group">        
-                                            <div class="col-sm-offset-2 col-sm-10">
-                                              <button class="btn btn-primary" ng-click="add()"> Add Student</button>
-                                            </div>
-                                          </div>
-                                      </form>
+                                    <div class="form-group">
+                                      <label class="control-label col-sm-2">Department ID</label>
+                                      <div class="col-sm-6">
+                                        <input type="text" class="form-control" ng-model="formData.dpid" placeholder="Eg. CSE" requried name="dpid">
+                                        <p ng-show="add_stud.dpid.$invalid && !add_stud.dpid.$pristine" class="help-block">Department ID is required.</p>
+                                      </div>
+                                    </div>                                                                                    
+                                    <div class="form-group">
+                                      <label class="control-label col-sm-2">Year Enrolled</label>
+                                      <div class="col-sm-6">
+                                        <input type="text" class="form-control" ng-model="formData.year" placeholder="Eg. 4" required name="year">
+                                        <p ng-show="add_stud.year.$invalid && !add_stud.year.$pristine" class="help-block">Year is required.</p>
+                                      </div>
+                                    </div>    
+                                    <div class="form-group">
+                                      <label class="control-label col-sm-2">Degree</label>
+                                      <div class="col-sm-6">
+                                        <input type="text" class="form-control" ng-model="formData.degree" placeholder="Eg. 4" required name="degree">
+                                        <p ng-show="add_stud.degree.$invalid && !add_stud.degree.$pristine" class="help-block">Degree is required.</p>
+                                      </div>
+                                    </div>          
+                                    <div class="form-group">
+                                      <label class="control-label col-sm-2">Address</label>
+                                      <div class="col-sm-6">
+                                        <textarea class="form-control" rows="5" ng-model="formData.address" required name="address"></textarea>
+                                        <p ng-show="add_stud.address.$invalid && !add_stud.address.$pristine" class="help-block">Address is required.</p>
+                                      </div>
+                                    </div>       
+                                    <div class="form-group">
+                                      <label class="control-label col-sm-2">E-mail ID</label>
+                                      <div class="col-sm-6">
+                                        <input type="text" class="form-control" ng-model="formData.emailid" placeholder="Eg. 4">
+                                      </div>
+                                    </div>                        
+                                    <div class="form-group">
+                                      <label class="control-label col-sm-2">Contact Number</label>
+                                      <div class="col-sm-6">
+                                        <input type="text" class="form-control" ng-model="formData.contactno" placeholder="Eg. 4">
+                                      </div>
+                                    </div>  
+                                    <div class="form-group">        
+                                      <div class="col-sm-offset-2 col-sm-10">
+                                        <button class="btn btn-primary" ng-disabled="add_stud.$invalid" ng-click="add()"> Add Student</button>
+                                      </div>
+                                    </div>
+                                  </form>
                                 </div>
 
 
-                            <!--To show all course records. They will be displayed only when      show_Inst=true
-                            All other forms and screens will be hidden -->
-                              <table class="table table-striped" ng-show="show_students">
+                                <!--To show all course records. They will be displayed only when      show_Inst=true
+                                All other forms and screens will be hidden -->
+                                <table class="table table-striped" ng-show="show_students">
                                   <thead>
-                                      <tr>
-                                              <th>Student ID</th> 
-                                              <th>Student Name</th>
-                                              <th>Department</th> 
-                                              <th>Year Enrolled</th>
-                                              <th>Degree</th> 
-                                              <th>Address</th>
-                                              <th>Email ID</th> 
-                                              <th>Contact No</th>
-                                              <th></th>
-                                              <th></th>
-                                      </tr>   
+                                    <tr>
+                                      <th>Student ID</th> 
+                                      <th>Student Name</th>
+                                      <th>Department</th> 
+                                      <th>Year Enrolled</th>
+                                      <th>Degree</th> 
+                                      <th>Address</th>
+                                      <th>Email ID</th> 
+                                      <th>Contact No</th>
+                                      <th></th>
+                                      <th></th>
+                                    </tr>   
                                   </thead>
                                   <tbody>
-                                      <tr ng-repeat = "data in full_list">
-                                              <td>{{data.stid}}</td>
-                                              <td>{{data.name}}</td>
-                                              <td>{{data.dpid}}</td>
-                                              <td>{{data.year}}</td>
-                                              <td>{{data.degree}}</td>
-                                               <td>{{data.address}}</td>
-                                              <td>{{data.emailid}}</td>
-                                              <td>{{data.contactno}}</td>                                                                                       
-                                              <td><button class="btn btn-primary" ng-click="displayedit(data.stid)"> Open Record</button></td>
-                                      </tr>
+                                    <tr ng-repeat = "data in full_list">
+                                      <td>{{data.stid}}</td>
+                                      <td>{{data.name}}</td>
+                                      <td>{{data.dpid}}</td>
+                                      <td>{{data.year}}</td>
+                                      <td>{{data.degree}}</td>
+                                      <td>{{data.address}}</td>
+                                      <td>{{data.emailid}}</td>
+                                      <td>{{data.contactno}}</td>                                                                                       
+                                      <td><button class="btn btn-primary" ng-click="displayedit(data.stid)"> Open Record</button></td>
+                                    </tr>
                                   </tbody>
-                              </table>
+                                </table>
 
-                            <!-- The table shows full profile of the person whose record you want to delete by entering the searchkey-->
-
-                            <table class="table table-striped" ng-show="delete_students">
-                                      <tr class="form-group">
-                                            <th><label class="control-label col-sm-6">Student ID</label></th>
-                                            <td class="col-sm-3"> <input type="text" class="form-control"  ng-model="searchkey.id" placeholder="Eg. CSE101"></td>
-                                            <td><button class="btn btn-primary" ng-click="displayprofile()"> Find Course</button></td>
-                                      </tr>
-                                      <tr>
-                                              <th>Student ID</th>
-                                              <td>{{data.stid}}</td>
-                                      </tr>                                        
-                                      <tr>
-                                              <th>Name</th>
-                                              <td>{{data.name}}</td>
-                                      </tr>  
-                                      <tr>
-                                              <th>Department</th>
-                                              <td>{{data.department}}</td>
-                                      </tr>
-                                      <tr>
-                                              <th>Enrollment Year</th>
-                                              <td>{{data.year}}</td>
-                                      </tr>  
-                                      <tr>
-                                              <th>Degree</th>
-                                              <td>{{data.degree}}</td>
-                                      </tr>  
-                                      <tr>
-                                              <th>Address</th>
-                                              <td>{{data.address}}</td>
-                                      </tr>
-                                      <tr>
-                                              <th>Email ID</th>
-                                              <td>{{data.emailid}}</td>
-                                      </tr> 
-                                      <tr>
-                                              <th>Contact No</th>
-                                              <td>{{data.contactno}}</td>
-                                      </tr>     
-                                      <tr>
-                                              <td><button class="btn btn-danger" ng-click="delete(data.stid)">Delete Record</button></td>
-                                      </tr>
-                             </table>
-
-                            <!--Will show the information of the profile to be updated according to the key entered -->
-                            <div class="container" ng-show="update_students">
-                                <form class="form-horizontal" role="form">
-                                    <h2>Update the Record</h2>
-                                    <div class="form-group" ng-show="!data.stid">
-                                      <label class="control-label col-sm-2">Student ID </label>
-                                      <div class="col-sm-3">
-                                        <input type="text" class="form-control" ng-model="searchkey.id" placeholder="Eg. U10112">
+                                <!-- The table shows full profile of the person whose record you want to delete by entering the searchkey-->
+                                <div ng-show="delete_students">
+                                  <form class="form-horizontal" role="form" name="del_stud" novalidate>
+                                      <h2>Delete Student Record </h2>
+                                      <div class="form-group">
+                                        <label class="control-label col-sm-2">* Student Id</label>
+                                        <div class="col-sm-6">
+                                          <input type="text" name="stid" class="form-control"  ng-model="searchkey.id" placeholder="Eg. CSE" required>
+                                          <p ng-show="del_stud.stid.$invalid && !del_stud.stid.$pristine" class="help-block">Course ID is required.</p>
+                                        </div>
+                                        <button class="btn btn-primary" ng-disabled="del_stud.$invalid" ng-click="displayprofile()"> Find Student </button>
                                       </div>
-                                      <div class="col-sm-3">
-                                        <button class="btn btn-primary" ng-click="displayedit(searchkey.id)"> Find this Record</button>
-                                      </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="control-label col-sm-2">Student ID</label>
-                                        <div class="col-sm-6">          
-                                          <input type="text" class="form-control"  disabled ng-model="data.stid">
+                                  </form>
+                                <table class="table table-striped" >
+                                  <tr>
+                                    <th>Student ID</th>
+                                    <td>{{data.stid}}</td>
+                                  </tr>                                        
+                                  <tr>
+                                    <th>Name</th>
+                                    <td>{{data.name}}</td>
+                                  </tr>  
+                                  <tr>
+                                    <th>Department</th>
+                                    <td>{{data.department}}</td>
+                                  </tr>
+                                  <tr>
+                                    <th>Enrollment Year</th>
+                                    <td>{{data.year}}</td>
+                                  </tr>  
+                                  <tr>
+                                    <th>Degree</th>
+                                    <td>{{data.degree}}</td>
+                                  </tr>  
+                                  <tr>
+                                    <th>Address</th>
+                                    <td>{{data.address}}</td>
+                                  </tr>
+                                  <tr>
+                                    <th>Email ID</th>
+                                    <td>{{data.emailid}}</td>
+                                  </tr> 
+                                  <tr>
+                                    <th>Contact No</th>
+                                    <td>{{data.contactno}}</td>
+                                  </tr>     
+                                  <tr>
+                                    <td><button class="btn btn-danger" ng-click="delete(data.stid)">Delete Record</button></td>
+                                  </tr>
+                                </table>
+                              </div>
+
+                                <!--Will show the information of the profile to be updated according to the key entered -->
+                                <div class="container" ng-show="update_students">
+
+
+                                <form class="form-horizontal" role="form" name="up_stud">
+                                      <h2>Update the Record</h2>
+                                      <div class="form-group" ng-show="!data.stid">
+                                        <label class="control-label col-sm-2">* Student ID </label>
+                                        <div class="col-sm-3">
+                                          <input type="text" class="form-control" ng-model="searchkey.id" placeholder="Eg. U10112" required name="stid">
+                                          <p ng-show="up_stud.stid.$invalid && !up_stud.stid.$pristine" class="help-block">Student ID is required.</p>
                                         </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="control-label col-sm-2">Name</label>
-                                        <div class="col-sm-6">          
-                                          <input type="text" class="form-control" ng-model="data.name">
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="control-label col-sm-2">Department</label>
-                                        <div class="col-sm-6">          
-                                          <input type="text" class="form-control"  ng-model="data.dpid">
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="control-label col-sm-2">Enrollment Year</label>
-                                        <div class="col-sm-6">          
-                                          <input type="text" class="form-control" ng-model="data.year">
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="control-label col-sm-2">Degree</label>
-                                        <div class="col-sm-6">          
-                                          <input type="text" class="form-control"  ng-model="data.degree">
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="control-label col-sm-2">Address</label>
-                                        <div class="col-sm-6">          
-                                          <textarea type="text" class="form-control" ng-model="data.address"></textarea>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="control-label col-sm-2">Email ID</label>
-                                        <div class="col-sm-6">          
-                                          <input type="text" class="form-control"  ng-model="data.emailid">
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="control-label col-sm-2">Contact No</label>
-                                        <div class="col-sm-6">          
-                                          <input type="text" class="form-control" ng-model="data.contactno">
-                                        </div>
-                                    </div>
-                                      <div class="form-group">        
-                                        <div class="col-sm-offset-2 col-sm-10">
-                                         <td><button class="btn btn-info" ng-show="showUpdateButton" ng-click="updaterecord(data.stid)">Update</button></td>
-                                         <td><button class="btn btn-danger" ng-show="showDeleteButton"ng-click="delete(data.stid)">Delete Record</button></td>
+                                        <div class="col-sm-3">
+                                          <button class="btn btn-primary" ng-disabled="up_stud.$invalid" ng-click="displayedit(searchkey.id)"> Find Student</button>
                                         </div>
                                       </div>
-                                </form>
-                            </div>
-
-
-                            <!--Query option will display the form with various fields to query on. The output will the list of the similar records. The query form will be displayed only when query_inst=true -->
-                            <form class="form-horizontal" role="form" ng-show = "query_students">
-                                  <h2>Query Search</h2>
-                                  <br>
                                     <div class="form-group">
                                       <label class="control-label col-sm-2">Student ID</label>
-                                      <div class="col-sm-3">
-                                        <input type="text" class="form-control" ng-model="querykey.stid">
+                                      <div class="col-sm-6">          
+                                        <input type="text" class="form-control"  disabled ng-model="data.stid">
                                       </div>
                                     </div>
                                     <div class="form-group">
                                       <label class="control-label col-sm-2">Name</label>
-                                      <div class="col-sm-3">
-                                        <input type="text" class="form-control" ng-model="querykey.name">
+                                      <div class="col-sm-6">          
+                                        <input type="text" class="form-control" ng-model="data.name">
                                       </div>
                                     </div>
                                     <div class="form-group">
                                       <label class="control-label col-sm-2">Department</label>
-                                      <div class="col-sm-3">
-                                        <input type="text" class="form-control" ng-model="querykey.dpid">
+                                      <div class="col-sm-6">          
+                                        <input type="text" class="form-control"  ng-model="data.dpid">
                                       </div>
                                     </div>
                                     <div class="form-group">
                                       <label class="control-label col-sm-2">Enrollment Year</label>
-                                      <div class="col-sm-3">
-                                        <input type="text" class="form-control" ng-model="querykey.year">
+                                      <div class="col-sm-6">          
+                                        <input type="text" class="form-control" ng-model="data.year">
                                       </div>
                                     </div>
                                     <div class="form-group">
                                       <label class="control-label col-sm-2">Degree</label>
-                                      <div class="col-sm-3">
-                                        <input type="text" class="form-control" ng-model="querykey.degree">
-                                      </div>
-                                    </div>                                  
-                                    <div class="form-group">        
-                                      <div class="col-sm-offset-2 col-sm-10">
-                                        <button class="btn btn-primary" ng-click="querysearch()" > Find this record</button>
+                                      <div class="col-sm-6">          
+                                        <input type="text" class="form-control"  ng-model="data.degree">
                                       </div>
                                     </div>
-                            </form>
+                                    <div class="form-group">
+                                      <label class="control-label col-sm-2">Address</label>
+                                      <div class="col-sm-6">          
+                                        <textarea type="text" class="form-control" ng-model="data.address"></textarea>
+                                      </div>
+                                    </div>
+                                    <div class="form-group">
+                                      <label class="control-label col-sm-2">Email ID</label>
+                                      <div class="col-sm-6">          
+                                        <input type="text" class="form-control"  ng-model="data.emailid">
+                                      </div>
+                                    </div>
+                                    <div class="form-group">
+                                      <label class="control-label col-sm-2">Contact No</label>
+                                      <div class="col-sm-6">          
+                                        <input type="text" class="form-control" ng-model="data.contactno">
+                                      </div>
+                                    </div>
+                                    <div class="form-group">        
+                                      <div class="col-sm-offset-2 col-sm-10">
+                                       <td><button class="btn btn-info" ng-show="showUpdateButton" ng-click="updaterecord(data.stid)">Update</button></td>
+                                       <td><button class="btn btn-danger" ng-show="showDeleteButton"ng-click="delete(data.stid)">Delete Record</button></td>
+                                     </div>
+                                   </div>
+                                 </form>
+                               </div>
+
+
+                               <!--Query option will display the form with various fields to query on. The output will the list of the similar records. The query form will be displayed only when query_inst=true -->
+                               <form class="form-horizontal" role="form" ng-show = "query_students">
+                                <h2>Query Search</h2>
+                                <br>
+                                <div class="form-group">
+                                  <label class="control-label col-sm-2">Student ID</label>
+                                  <div class="col-sm-3">
+                                    <input type="text" class="form-control" ng-model="querykey.stid">
+                                  </div>
+                                </div>
+                                <div class="form-group">
+                                  <label class="control-label col-sm-2">Name</label>
+                                  <div class="col-sm-3">
+                                    <input type="text" class="form-control" ng-model="querykey.name">
+                                  </div>
+                                </div>
+                                <div class="form-group">
+                                  <label class="control-label col-sm-2">Department</label>
+                                  <div class="col-sm-3">
+                                    <input type="text" class="form-control" ng-model="querykey.dpid">
+                                  </div>
+                                </div>
+                                <div class="form-group">
+                                  <label class="control-label col-sm-2">Enrollment Year</label>
+                                  <div class="col-sm-3">
+                                    <input type="text" class="form-control" ng-model="querykey.year">
+                                  </div>
+                                </div>
+                                <div class="form-group">
+                                  <label class="control-label col-sm-2">Degree</label>
+                                  <div class="col-sm-3">
+                                    <input type="text" class="form-control" ng-model="querykey.degree">
+                                  </div>
+                                </div>                                  
+                                <div class="form-group">        
+                                  <div class="col-sm-offset-2 col-sm-10">
+                                    <button class="btn btn-primary" ng-click="querysearch()" > Find this record</button>
+                                  </div>
+                                </div>
+                              </form>
 
                             </div>
 
-                            </div>
                           </div>
-                          <!-- End of Student HTML -->
-
-
-
-
-
-
-
-
-
-
-
-                         </div>
-
                         </div>
+                        <!-- End of Student HTML -->
+
+
+
+                                        <!--start of faculty html-->
+                          <div class="container" ng-show="is_faculty">
+                            <div class="row">
+                                      <div class="col-md-2">
+                                        <ul class="nav nav-pills nav-stacked">
+                                          <!--Butttons for differnt operations -->
+                                          <li><a href ng-click="showAllFaculty()">All Records</a></li>
+                                          <li><a href ng-click="showAddFaculty()">Add Record</a></li>
+                                          <li><a href ng-click="updateFaculty()">Update Record</a></li>
+                                          <li><a href ng-click="deleteFaculty()">Delete Record</a></li>
+                                          <li><a href ng-click="queryFaculty()">Query</a></li>
+                                        </ul>
+                                      </div>
+                                      <div class="col-md-10">
+                                            <!--To show all instructor records. They will be displayed only when show_Inst=true All other forms and screens will be hidden -->
+                                            <table class="table table-striped" ng-show="show_faculty">
+                                                <thead>
+                                                    <tr>
+                                                            <th>faculty id</th> 
+                                                            <th>Name</th>
+                                                            <th>title</th>
+                                                            <th>dpid</th>
+                                                            <th>emailid</th>
+                                                            <th>contactno</th>
+                                                            <th>areas</th>
+                                                            <th></th>
+                                                            <th></th>
+                                                    </tr>   
+                                                </thead>
+                                                <tbody>
+                                                    <tr ng-repeat = "data in full_list">
+                                                            <td>{{data.fcid}}</td>
+                                                            <td>{{data.name}}</td>
+                                                            <td> {{data.title}}</td>
+                                                            <td>{{data.dpid}} </td>
+                                                            <td>{{data.emailid}} </td>
+                                                            <td> {{data.contactno}} </td>
+                                                            <td>{{data.areas}}</td> 
+                                                            <td><button class="btn btn-primary" ng-click="displayedit(data.fcid)"> Open Record</button></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+
+
+
+                                            <!-- Add a new student. Will only be displayed when add_inst=true-->
+                                             <div class="container" ng-show="add_faculty">
+                                                <form class="form-horizontal" role="form" name="add_faculty" novalidate>
+                                                  <h2>Add a New Record</h2>
+
+                                                    <div class="form-group">
+                                                      <label class="control-label col-sm-2">Faculty Id</label>
+                                                      <div class="col-sm-6">
+                                                        <input type="text" name="fcid" class="form-control" ng-model="formData.fcid" placeholder="Eg. CSE" required>
+                                                        <p ng-show="add_faculty.fcid.$invalid && !add_faculty.fcid.$pristine" class="help-block">faculty ID is required.</p>
+                                                      </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                      <label class="control-label col-sm-2">Name</label>
+                                                      <div class="col-sm-6">          
+                                                        <input type="text" name="name" class="form-control"  ng-model="formData.name" placeholder="Eg. (Mr/Ms) Name Surname" required>
+                                                        <p ng-show="add_faculty.name.$invalid && !add_faculty.name.$pristine" class="help-block"> Name is required.</p>
+                                                      </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                      <label class="control-label col-sm-2" >title</label>
+                                                      <div class="col-sm-6">          
+                                                        <input type="text" class="form-control" ng-model="formData.title" name ="title"placeholder="F / M / O" required>
+                                                        <p ng-show="add_faculty.title.$invalid && !add_faculty.title.$pristine" class="help-block"> Name is required.</p>
+                                                      </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                      <label class="control-label col-sm-2">dpid</label>
+                                                      <div class="col-sm-6">          
+                                                        <input type="text" class="form-control" name ="dpid" ng-model="formData.dpid" placeholder="dpidname" required>
+                                                        <p ng-show="add_faculty.dpid.$invalid && !add_faculty.dpid.$pristine" class="help-block"> dpid is required.</p>
+                                                      </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                      <label class="control-label col-sm-2">emailid</label>
+                                                      <div class="col-sm-6">          
+                                                        <input type="email" name ="emailid" class="form-control"  ng-model="formData.emailid" placeholder="emailidname">
+                                                        <p ng-show="add_faculty.emailid.$invalid && !add_faculty.emailid.$pristine" class="help-block"> emailid is required.</p>
+                                                      </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                      <label class="control-label col-sm-2">contactno</label>
+                                                      <div class="col-sm-6">          
+                                                        <input type="text" name ="contactno"class="form-control"  ng-model="formData.contactno" placeholder="contactnoname">
+                                                      </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                      <label class="control-label col-sm-2">areas</label>
+                                                      <div class="col-sm-6">          
+                                                        <input name ="areas"type="text" class="form-control"  ng-model="formData.areas" placeholder="areasname">
+                                                      </div>
+                                                    </div>
+                                                    <div class="form-group">        
+                                                      <div class="col-sm-offset-2 col-sm-10">
+                                                        <button class="btn btn-primary" ng-disabled ="add_faculty.$invalid"ng-click="add()"> Add Record</button>
+                                                      </div>
+                                                    </div>
+                                                </form>
+                                          </div>
+
+                                          <!-- The table shows full profile of the person whose record you want to delete by entering the searchkey-->
+                                                          <div ng-show="delete_faculty">
+                                                  <form class="form-horizontal" role="form" name="del_faculty" novalidate>
+                                                    <h2>Delete a New Record</h2>
+
+                                                    <div class="form-group">
+                                                      <label class="control-label col-sm-2"> faculty Id</label>
+                                                      <div class="col-sm-6">
+                                                        <input type="text" name="fcid" class="form-control"  ng-model="searchkey.id" placeholder="Eg. 101" required>
+                                                        <p ng-show="del_faculty.fcid.$invalid && !del_faculty.fcid.$pristine" class="help-block">faculty ID is required.</p>
+                                                      </div>
+                                                      <button class="btn btn-primary" ng-disabled="del_faculty.$invalid" ng-click="displayprofile()">  Find this record</button></div>
+                                                    </form>
+                                                    <table class="table table-striped" ng-show="delete_faculty">
+                                                    </tr>
+                                                    <tr>
+                                                            <th>faculty id</th>
+                                                            <td>{{data.fcid}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                            <th>Name</th>
+                                                            <td>{{data.name}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                            <th>title</th>
+                                                            <td> {{data.title}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                            <th>dpid</th>
+                                                            <td>{{data.dpid}}</td> 
+                                                    </tr>
+                                                    <tr>
+                                                            <th>emailid</th>
+                                                            <td>{{data.emailid}}</td> 
+                                                    </tr>  
+                                                    <tr>
+                                                            <th>contactno</th>
+                                                            <td>{{data.contactno}}</td> 
+                                                    </tr>  
+                                                    <tr>
+                                                            <th>areas</th>
+                                                            <td>{{data.areas}}</td> 
+                                                    </tr>   
+                                                    <tr>
+                                                            <td><button class="btn btn-danger" ng-click="delete(data.fcid)">Delete Record</button></td>
+                                                    </tr>
+                                           </table>
+                                         </div>
+
+                                            <!--Update Student profile according to the ID entered -->
+                                            <div class="container" ng-show="update_faculty">
+                                  <form class="form-horizontal" role="form" name="update_faculty">
+                                    <h2>Update the Record</h2>
+                                    <div class="form-group" ng-show="!data.fcid">
+                                      <label class="control-label col-sm-2">Enter ID </label>
+                                      <div class="col-sm-3">
+                                        <input type="text" name="fcid" class="form-control" ng-model="searchkey.id" placeholder="Eg. U10112" required>
+                                        <p ng-show="update_faculty.fcid.$invalid && !update_faculty.fcid.$pristine" class="help-block">faculty ID is required.</p>
+                                      </div>
+                                                        <div class="col-sm-3">
+                                        <button class="btn btn-primary" ng-disabled="update_faculty.$invalid" ng-click="displayedit(searchkey.id)"> Find this Record</button>
+                                      </div>
+                                                        </div>
+                                    <div class="form-group">
+                                      <label class="control-label col-sm-2">faculty ID</label>
+                                      <div class="col-sm-6">          
+                                        <input type="text" class="form-control"  disabled ng-model="data.fcid">
+                                      </div>
+                                    </div>
+                                                       
+                                                      <div class="form-group">
+                                                        <label class="control-label col-sm-2">Name</label>
+                                                        <div class="col-sm-6">          
+                                                          <input type="text" class="form-control"  ng-model="data.name" >
+                                                        </div>
+                                                      </div>
+                                                      <div class="form-group">
+                                                        <label class="control-label col-sm-2">title</label>
+                                                        <div class="col-sm-6">          
+                                                          <input type="text" class="form-control" ng-model="data.title" >
+                                                        </div>
+                                                      </div>
+                                                      <div class="form-group">
+                                                        <label class="control-label col-sm-2">dpid</label>
+                                                        <div class="col-sm-6">          
+                                                          <input type="text" class="form-control"  ng-model="data.dpid" >
+                                                        </div>
+                                                      </div>
+                                                      <div class="form-group">
+                                                        <label class="control-label col-sm-2">emailid</label>
+                                                        <div class="col-sm-6">          
+                                                          <input type="text" class="form-control"  ng-model="data.emailid" >
+                                                        </div>
+                                                      </div>
+                                                      <div class="form-group">
+                                                        <label class="control-label col-sm-2">contactno</label>
+                                                        <div class="col-sm-6">          
+                                                          <input type="text" class="form-control"  ng-model="data.contactno">
+                                                        </div>
+                                                      </div>
+                                                      <div class="form-group">
+                                                        <label class="control-label col-sm-2">areas</label>
+                                                        <div class="col-sm-6">          
+                                                          <input type="text" class="form-control"  ng-model="data.areas" >
+                                                        </div>
+                                                      </div>
+                                                      <div class="form-group">        
+                                                        <div class="col-sm-offset-2 col-sm-10">
+                                                         <td><button class="btn btn-info" ng-show="showUpdateButton" ng-click="updaterecord(data.fcid)">Update</button></td>
+                                                         <td><button class="btn btn-danger" ng-show="showDeleteButton"ng-click="delete(data.fcid)">Delete Record</button></td>
+                                                        </div>
+                                                      </div>
+                                                </form>
+                                            </div>
+
+
+                                            <!--Query option will display the form with various fields to query on. The output will the list of the similar records. The query form will be displayed only when query_faculty=true -->
+                                            <form class="form-horizontal" role="form" ng-show = "query_faculty">
+                                                  <h2>Query Search</h2>
+                                                  <br>
+                                                    <div class="form-group">
+                                                      <label class="control-label col-sm-2">Enter ID</label>
+                                                      <div class="col-sm-3">
+                                                        <input type="text" class="form-control" ng-model="querykey.fcid">
+                                                      </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                      <label class="control-label col-sm-2">Enter Name</label>
+                                                      <div class="col-sm-3">
+                                                        <input type="text" class="form-control" ng-model="querykey.name">
+                                                      </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                      <label class="control-label col-sm-2">Enter title</label>
+                                                      <div class="col-sm-3">
+                                                        <input type="text" class="form-control" ng-model="querykey.title">
+                                                      </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                      <label class="control-label col-sm-2">dpid</label>
+                                                      <div class="col-sm-3">
+                                                        <input type="text" class="form-control" ng-model="querykey.dpid">
+                                                      </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                      <label class="control-label col-sm-2">emailid</label>
+                                                      <div class="col-sm-3">
+                                                        <input type="text" class="form-control" ng-model="querykey.emailid">
+                                                      </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                      <label class="control-label col-sm-2">contactno</label>
+                                                      <div class="col-sm-3">
+                                                        <input type="text" class="form-control" ng-model="querykey.contactno">
+                                                      </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                      <label class="control-label col-sm-2">areas</label>
+                                                      <div class="col-sm-3">
+                                                        <input type="text" class="form-control" ng-model="querykey.areas">
+                                                      </div>
+                                                    </div>
+
+                                                    <div class="form-group">        
+                                                      <div class="col-sm-offset-2 col-sm-10">
+                                                        <button class="btn btn-primary" ng-click="querysearch()" > Find this record</button>
+                                                      </div>
+                                                    </div>
+                                            </form>
+
+
+                                      </div>
+                            </div>
+            </div>
+
+                          <!--end of faculty html-->
+
+
+
+
+
+
+                      </div>
+
+                    </div>
+                  </div>
+
+
+
                 </div>
+              </div>
 
 
-
-   </div>
-</div>
-
-
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.16/angular.min.js"></script>
-<script src="javascripts/controller.js"></script>
-</body>
-</html>                                     
+              <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.16/angular.min.js"></script>
+              <script src="javascripts/controller.js"></script>
+            </body>
+            </html>                                     

@@ -184,7 +184,26 @@ router.put('/students/query', function(req, res){
     });
 });
 
-
+router.put('/faculty/query', function(req, res){
+    var results = [];
+    console.log("This is query function");
+    var data = {fcid: req.body.fcid, name:req.body.name, title:req.body.title, dpid:req.body.dpid, emailid:req.body.emailid, contactno:req.body.contactno,areas:req.body.areas};
+    console.log(data);
+    pg.connect(conString, function(err, client, done) {
+        var query = client.query("SELECT * FROM faculty WHERE ((name ILIKE $1) AND (fcid ILIKE $2) AND (title ILIKE $3) AND (dpid ILIKE $4) AND (emailid ILIKE $5) AND (contactno ILIKE $6) AND (areas ILIKE $7))", [data.name+ '%', data.fcid+ '%', data.title+ '%',data.dpid +'%',data.emailid+ '%',data.contactno+ '%', data.areas+ '%']);
+        query.on('row', function(row) {
+            results.push(row);
+        });
+        query.on('end', function() {
+            client.end();
+            return res.json(results);
+        });
+        // Handle Errors
+        if(err) {
+          console.log(err);
+        }
+    });
+});
 //---------------------Update the record --------------\\
 router.put('/deptmaster/:id', function (req, res) {
   var id = req.params.id;
@@ -412,5 +431,114 @@ router.delete('/students/:id', function(req, res) {
     });
 
  });
+
+//=================================FOR FACULTY RECORDS!!!!=================================\\
+
+//-----------------Add a new record--------------------\\
+router.post('/faculty/addrecord', function(req, res) {
+    var results = [];
+    console.log("I got the add request");
+    console.log(req.body);
+     var data = {fcid: req.body.fcid, name:req.body.name, title:req.body.title, dpid:req.body.dpid, emailid:req.body.emailid, contactno:req.body.contactno,areas:req.body.areas};
+    console.log(data.fcid);
+
+    pg.connect(conString, function(err, client, done) {
+    client.query("INSERT INTO faculty(fcid, name, title,dpid,emailid,contactno,areas) values($1, $2, $3, $4,$5,$6,$7)", [data.fcid, data.name, data.title ,data.dpid,data.emailid, data.contactno,data.areas]);
+      if(err) {
+          console.log(err);
+        }
+        else{
+            return res.json([]);
+        }
+    });
+
+});
+
+//---------Display all records ---------------------\\
+router.get('/faculty/all', function(req, res) {
+    var results = [];
+    pg.connect(conString, function(err, client, done) {
+        var query = client.query("SELECT * FROM faculty ORDER BY name ASC ;");
+        query.on('row', function(row) {
+            results.push(row);
+        });
+        query.on('end', function() {
+            client.end();
+            console.log(results);
+            return res.json(results);
+        });
+        // Handle Errors
+        if(err) {
+          console.log(err);
+        }
+    });
+});
+
+//-----------Get the row for a particular id------------\\
+router.get('/faculty/:id', function(req, res){
+    var results;
+    var id = req.params.id;
+    console.log(id);
+    pg.connect(conString, function(err, client, done) {
+        var query = client.query("SELECT * FROM faculty WHERE fcid=($1)", [id]);
+        query.on('row', function(row) {
+            results =row;
+        });
+        query.on('end', function() {
+            client.end();
+            return res.json(results);
+        });
+
+        if(err) {
+          console.log(err);
+        }
+    });
+});    
+
+
+
+
+//---------------------Update the record --------------\\
+router.put('/deptmaster/:id', function (req, res) {
+  var id = req.params.id;
+  var results = [];
+
+  var data = {id: req.body.dpid, name: req.body.deptname};
+
+ pg.connect(conString, function(err, client, done) {
+        client.query("UPDATE deptmaster SET deptname=($2) WHERE dpid=($1)", [data.id, data.name]);
+
+        if(err) {
+          console.log(err);
+        }
+        else{
+            return res.json([]);
+        }
+    });
+
+
+});
+//---------------------Update the record --------------\\
+router.put('/faculty/:id', function (req, res) {
+  var id = req.params.id;
+  console.log(id);
+  var results = [];
+
+   var data = {fcid: req.body.fcid, name:req.body.name, title:req.body.title, dpid:req.body.dpid, emailid:req.body.emailid, contactno:req.body.contactno,areas:req.body.areas};
+    
+
+ pg.connect(conString, function(err, client, done) {
+        client.query("UPDATE faculty SET name=($2), title=($3),dpid =($4),emailid=($5),contactno =($6), areas=($7) WHERE fcid=($1)", [id, data.name, data.title, data.dpid,data.emailid,data.contactno,data.areas]);
+
+        if(err) {
+          console.log(err);
+        }
+        else{
+            return res.json([]);
+        }
+    });
+
+
+});
 
 module.exports = router;

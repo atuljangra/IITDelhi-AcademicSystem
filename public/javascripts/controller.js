@@ -37,9 +37,12 @@ queryInst()/queryStud()/queryCourses() - for displaying query form and hiding ot
    $scope.is_students = false;//initally student records are hidden
    $scope.is_instructor=false;//Initially instructor records are hidden, will be displayed when we click instructor button
    $scope.is_deptMaster = false; //initially courses records are hiddedn
+   $scope.is_faculty = false;
+
     $scope.select_deptMaster = function(){
         $scope.is_students = false;
         $scope.is_courseMaster = false;
+        $scope.is_faculty = false;
         $scope.is_deptMaster = true;
     }
 
@@ -47,12 +50,22 @@ queryInst()/queryStud()/queryCourses() - for displaying query form and hiding ot
         $scope.is_deptMaster=false; //to hide the instructor record container in crud.html 
         $scope.is_courseMaster = true; // to display the course record container in crud.html
         $scope.is_students = false;
-    }
+        $scope.is_faculty = false;
 
+    }
+    
+    $scope.select_faculty = function(){
+        $scope.is_faculty = true; // to display the student record container in crud.html
+        $scope.is_deptMaster=false; //to hide the instructor record container in crud.html 
+        $scope.is_courseMaster = false; // to display the course record container in crud.html
+        $scope.is_students = false;
+    }
     $scope.select_students = function(){
         $scope.is_courseMaster=false; //to hide the instructor record container in crud.html 
         $scope.is_students = true; //hide the student record container in crud.html
         $scope.is_deptMaster = false;
+        $scope.is_faculty = false;
+
     }
 
 }]);
@@ -68,7 +81,9 @@ var add_record = function($scope, $http){
     else if($scope.is_courseMaster){
         req_url = $http.post('/coursemaster/addrecord', $scope.formData);
     }
-
+    else if($scope.is_faculty){
+        req_url = $http.post('/faculty/addrecord', $scope.formData);
+    }
     else{
         req_url = $http.post('/students/addrecord', $scope.formData);
     }
@@ -84,7 +99,9 @@ var delete_record = function($scope, $http, id){
     if($scope.is_deptMaster){
        req_url = $http.delete('/deptmaster/' + id);
     }
-
+    else if($scope.is_faculty){
+        req_url = $http.delete('/faculty/' + id);
+    }
     else if($scope.is_courseMaster){
         req_url = $http.delete('/coursemaster/' + id);
     }
@@ -107,7 +124,9 @@ var show_record = function($scope, $http){
     else if($scope.is_courseMaster){
         req_url = $http.get('/coursemaster/all');
     }
-
+    else if($scope.is_faculty){
+        req_url = $http.get('/faculty/all');
+    }
     else{
         req_url = $http.get('/students/all');
     }
@@ -123,6 +142,9 @@ var update = function($scope, $http, id){
   //  console.log($scope.data.id);
     if($scope.is_deptMaster){
         req_url = $http.put('/deptmaster/' + id, $scope.data)
+    }
+    else if($scope.is_faculty){
+        req_url = $http.put('/faculty/' + id, $scope.data)
     }
 
     else if($scope.is_courseMaster){
@@ -150,6 +172,9 @@ var display_profile = function($scope, $http){
     else if($scope.is_courseMaster){
          req_url = $http.get('/coursemaster/' +id);
     }
+    else if($scope.is_faculty){
+         req_url = $http.get('/faculty/' +id);
+    }
     else{
         req_url = $http.get('/students/' +id);
     }
@@ -170,6 +195,9 @@ var edit = function($scope, $http, id){
     else if($scope.is_courseMaster){
         req_url = $http.get('/coursemaster/' +id);
     }
+    else if($scope.is_faculty){
+        req_url = $http.get('/faculty/' +id);
+    }
     else{
         req_url = $http.get('/students/' +id);
     }
@@ -186,7 +214,9 @@ var query = function($scope, $http){
     if($scope.is_deptMaster){
         req_url =    $http.put('/deptmaster/query', $scope.querykey);
     }
-
+    else if($scope.is_faculty){
+        req_url = $http.put('/faculty/query', $scope.querykey);
+    }
     else if($scope.is_courseMaster){
         req_url = $http.put('/coursemaster/query', $scope.querykey);
     }
@@ -210,11 +240,13 @@ acPortal.controller('mainCtrl', ['$scope','$http', function($scope, $http){
 //---------------------For Departments --------Taking care of all HTML views------------\\
     //when record form to add data 
     $scope.showAddDepartments = function(){
+        $scope.eror_emptyadd = false;
         $scope.add_departments = true; //show the add record form 
         $scope.show_departments = false;
         $scope.delete_departments = false; //to fide the delete form with key text field
         $scope.update_departments = false; //hide update form to enter search key
         $scope.query_departments =false;
+        $scope.formData = {};
 
     }
 
@@ -365,6 +397,55 @@ acPortal.controller('mainCtrl', ['$scope','$http', function($scope, $http){
         $scope.query_students = true;//show the query form (the advance search option)
     }
 
+//--------------------For faculty -- Taking care of all the html views--------------\\
+
+    $scope.showAllFaculty = function(){
+        $scope.show_faculty = true; //display the list of all records
+        $scope.add_faculty = false; //hide the add record data
+        $scope.delete_faculty = false;//hide the delete form
+        show_record($scope, $http); //call the display function
+        $scope.update_faculty = false; //hide the form for key to enter
+        $scope.query_faculty = false; //hide the query form
+    }
+
+    $scope.showAddFaculty = function(){
+        $scope.delete_faculty = false; //hide the delete form 
+        $scope.add_faculty = true; //display the add new faculty form
+        $scope.show_faculty = false; //hide the list of facultys
+        $scope.update_faculty = false; //hide the form for key to enter
+        $scope.query_faculty = false; //hide the query form
+    }
+
+    $scope.deleteFaculty = function(){
+        $scope.delete_faculty = true; //display the delete form to enter the key
+        $scope.show_faculty = false; //hide the display screen
+        $scope.add_faculty = false; //hide the add faculty form 
+        $scope.update_faculty = false; //hide the form for key to enter
+        $scope.query_faculty = false; //hide the query form
+        $scope.data = {};
+        $scope.searchkey = {}; //refresh the searchekey
+
+    }
+
+    $scope.updateFaculty = function(){
+        $scope.update_faculty = true; //display the form for key to enter
+        $scope.delete_faculty = false; //hide the delete form 
+        $scope.add_faculty = false; //hide the add new faculty form
+        $scope.show_faculty = false; //hide the list of facultys
+        $scope.query_faculty = false; //hide the query form
+        $scope.data={}; //to refresh the information stored in variable data
+        $scope.searchkey = {}; //refresh the searchekey
+        $scope.showDeleteButton = false; //to hide the delete button
+
+    }
+
+    $scope.queryFaculty = function(){
+        $scope.query_faculty = true; //show the query form
+        $scope.update_faculty = false; //hide the form for key to enter
+        $scope.delete_faculty = false; //hide the delete form 
+        $scope.add_faculty = false; //hide the add new faculty form
+        $scope.show_faculty = false; //hide the list of facultys
+    }
 
 
 
@@ -373,7 +454,10 @@ acPortal.controller('mainCtrl', ['$scope','$http', function($scope, $http){
 
     //when add operation is to be performed. Executed to POST data entered in add record form
     $scope.add = function(){
-        add_record($scope, $http);
+        if($scope.formData)
+            add_record($scope, $http);
+        else 
+            $scope.eror_emptyadd = true;
  //check this show_recrod if needed ---
   //      show_record($scope, $http); //call the display function
     }
@@ -385,12 +469,13 @@ acPortal.controller('mainCtrl', ['$scope','$http', function($scope, $http){
     $scope.displayedit  = function(id){
         edit($scope, $http, id);
 
-        if($scope.show_students || $scope.show_courses|| $scope.show_departments)
+        if($scope.show_students || $scope.show_courses|| $scope.show_departments||$scope.show_faculty)
             {
                 $scope.showUpdateButton = true;
                 $scope.showDeleteButton = true;
                 $scope.update_departments = true;
                 $scope.update_courses = true;
+                $scope.update_students = true;
                 $scope.show_students = false; //hide the entire student list
                 $scope.show_courses = false; //hide the entire student list 
                 $scope.show_departments = false;
@@ -402,6 +487,8 @@ acPortal.controller('mainCtrl', ['$scope','$http', function($scope, $http){
              $scope.show_students = false; //hide the entire student list
              $scope.show_courses = false; //hide the entire student list 
              $scope.show_departments = false;
+            $scope.show_faculty = false; //hide the entire faculty list
+
             }
     }
 
@@ -430,6 +517,27 @@ acPortal.controller('mainCtrl', ['$scope','$http', function($scope, $http){
                query($scope, $http);
                $scope.show_courses = true; //to display the entire instructor list 
                $scope.query_courses = false;//show the query form (the advance search option)
+
+        }
+        else if($scope.is_faculty){
+                if(angular.isUndefined(querykey.name))
+                   querykey.name="" ;
+                if(angular.isUndefined(querykey.title))
+                   querykey.title="" ;
+                if(angular.isUndefined(querykey.fcid))
+                   querykey.fcid="" ;
+               if(angular.isUndefined(querykey.dpid))
+                   querykey.dpid="" ;
+               if(angular.isUndefined(querykey.emailid))
+                   querykey.emailid="" ;
+               if(angular.isUndefined(querykey.contactno))
+                   querykey.contactno="" ;
+                if(angular.isUndefined(querykey.areas))
+                   querykey.areas="" ;
+
+               query($scope, $http);
+               $scope.show_faculty = true; //to display the entire faculty list 
+               $scope.query_faculty = false;//hide the query form (the advance search option)
 
         }
         else if($scope.is_deptMaster){
