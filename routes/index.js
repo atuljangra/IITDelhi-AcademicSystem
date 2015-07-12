@@ -184,6 +184,27 @@ router.put('/students/query', function(req, res){
     });
 });
 
+router.put('/coursesoffered/query', function(req, res){
+    var results = [];
+    console.log("This is query function");
+    var data = {crid: req.body.crid, facid:req.body.facid, semid:req.body.semid, slotid: req.body.slotid, numseats: req.body.numseats};
+    console.log(data);
+    pg.connect(conString, function(err, client, done){
+        var query = client.query("SELECT * FROM coursesoffered WHERE ((crid ILIKE $1) AND (facid ILIKE $2) AND (semid ILIKE $3) AND (slotid ILIKE $4) AND (numseats ILIKE $5))", [data.crid+ '%', data.facid+ '%', data.semid+ '%', data.slotid, data.numseats+ '%']);
+        query.on('row', function(row){
+            results.push(row);
+        });
+        query.on('end', function(){
+            client.end();
+            console.log(results);
+            return res.json(results);
+        });
+        if(err){
+            console.log(err);
+        }
+    });
+});
+
 router.put('/faculty/query', function(req, res){
     var results = [];
     console.log("This is query function");
@@ -538,6 +559,106 @@ router.put('/faculty/:id', function (req, res) {
 }
 });
 
+});
+
+//-----------------Add a new record--------------------\\
+router.post('/coursesoffered/addrecord', function(req, res) {
+    var results = [];
+    console.log("I got the add request");
+    console.log(req.body);
+    var data = {crid: req.body.crid, facid: req.body.facid, semid: req.body.semid, slotid: req.body.slotid, numseats: req.body.numseats, totalapplicants: req.body.totalapplicants, statuscode: req.body.statuscode};
+    console.log(data.crid);
+
+    pg.connect(conString, function(err, client, done) {
+        client.query("INSERT INTO coursesoffered(crid, facid, semid, slotid, numseats, totalapplicants, statuscode) values($1, $2, $3, $4, $5, $6, $7)", [data.crid, data.facid, data.semid, data.slotid, data.numseats, data.totalapplicants, data.statuscode]);
+        if(err) {
+          console.log(err);
+      }
+      else{
+        return res.json([]);
+    }
+});
+
+});
+
+//---------Display all records ---------------------\\
+router.get('/coursesoffered/all', function(req, res) {
+    var results = [];
+    pg.connect(conString, function(err, client, done) {
+        var query = client.query("SELECT * FROM coursesoffered ORDER BY crid ASC ;");
+        query.on('row', function(row) {
+            results.push(row);
+        });
+        query.on('end', function() {
+            client.end();
+            console.log(results);
+            return res.json(results);
+        });
+        // Handle Errors
+        if(err) {
+          console.log(err);
+      }
+  });
+});
+
+//-----------Get the row for a particular id------------\\
+router.get('/coursesoffered/:id', function(req, res){
+    var results;
+    var id = req.params.id;
+    console.log(id);
+    pg.connect(conString, function(err, client, done) {
+        var query = client.query("SELECT * FROM coursesoffered WHERE crid=($1)", [id]);
+        query.on('row', function(row) {
+            results =row;
+        });
+        query.on('end', function() {
+            client.end();
+            return res.json(results);
+        });
+
+        if(err) {
+          console.log(err);
+      }
+  });
+});    
+
+//---------------------Update the record --------------\\
+router.put('/coursesoffered/:id', function (req, res) {
+  var id = req.params.id;
+  console.log(id);
+  var results = [];
+
+  var data = {crid: req.body.crid, facid: req.body.facid, semid: req.body.semid, slotid: req.body.slotid, numseats: req.body.numseats, totalapplicants: req.body.totalapplicants, statuscode: req.body.statuscode};
+
+  pg.connect(conString, function(err, client, done) {
+    client.query("UPDATE coursesoffered SET facid=($2), semid=($3), slotid=($4), numseats=($5), totalapplicants = ($6), statuscode = ($7) WHERE crid=($1)", [id, data.facid, data.semid, data.slotid, data.numseats, data.totalapplicants, data.statuscode]);
+
+    if(err) {
+      console.log(err);
+  }
+  else{
+    return res.json([]);
+}
+});
+
+
+});
+
+router.delete('/coursesoffered/:id', function(req, res) {
+
+    var results = [];
+    var id = req.params.id;
+    pg.connect(conString, function(err, client, done) {
+        client.query("DELETE FROM coursesoffered WHERE crid=($1)", [id]);
+        console.log("Hey the record is deleted");
+            // Handle Errors
+            if(err) {
+              console.log(err);
+          }
+          else{
+            return res.json([]);
+        }
+    });
 
 });
 

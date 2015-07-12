@@ -5,7 +5,6 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var query = require('pg-query');
-var path = require('path');
 var pg = require('pg');
 
 var routes = require('./routes/index');
