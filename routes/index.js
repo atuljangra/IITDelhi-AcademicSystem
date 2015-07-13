@@ -587,7 +587,7 @@ router.post('/coursesoffered/addrecord', function(req, res) {
     var results = [];
     console.log("I got the add request");
     console.log(req.body);
-    var data = {crid: req.body.crid, facid: req.body.facid, semid: req.body.semid};
+    var data = {crid: req.body.crid, facid: req.body.facid, semid: req.body.semid, slotid: req.body.slotid, numseats: req.body.numseats, totalapplicants: req.body.totalapplicants, statuscode: req.body.statuscode};
     console.log(data);
 
     pg.connect(conString, function(err, client, done) {
@@ -698,6 +698,7 @@ router.post('/coursesregistered/addrecord', function(req, res) {
 
     pg.connect(conString, function(err, client, done) {
         client.query("INSERT INTO coursesregistered(crid, stid, semid) values($1, $2, $3)", [data.crid, data.stid, data.semid]);
+        client.query("update coursesoffered set totalapplicants=(totalapplicants+1) where crid=($1) and semid=($2)", [data.crid, data.semid]);
         if(err) {
           console.log(err);
       }
@@ -705,15 +706,15 @@ router.post('/coursesregistered/addrecord', function(req, res) {
         return res.json([]);
     }
 });
-    pg.connect(conString, function(err, client, done) {
+    /*pg.connect(conString, function(err, client, done) {
         client.query("update coursesoffered set totalapplicants=(totalapplicants+1) where crid=($1) and semid=($3)", [data.crid, data.stid, data.semid]);
         if(err) {
           console.log(err);
       }
       else{
         return res.json([]);
-    }
-});
+    }*/
+
 
 });
 
@@ -791,16 +792,6 @@ router.delete('/coursesregistered/:crid/:stid/:semid', function(req, res) {
     console.log(crid);
     pg.connect(conString, function(err, client, done) {
         client.query("DELETE FROM coursesregistered WHERE crid=($1) and stid=($2) and semid=($3)", [crid, stid, semid]);
-        console.log("Hey the record is deleted");
-            // Handle Errors
-            if(err) {
-              console.log(err);
-          }
-          else{
-            return res.json([]);
-        }
-    });
-    pg.connect(conString, function(err, client, done) {
         client.query("update coursesoffered set totalapplicants = totalapplicants-1 WHERE crid=($1) and semid=($2)", [crid, semid]);
         console.log("Hey the record is deleted");
             // Handle Errors
@@ -811,6 +802,18 @@ router.delete('/coursesregistered/:crid/:stid/:semid', function(req, res) {
             return res.json([]);
         }
     });
+    /*
+    pg.connect(conString, function(err, client, done) {
+        client.query("update coursesoffered set totalapplicants = totalapplicants-1 WHERE crid=($1) and semid=($2)", [crid, semid]);
+        console.log("Hey the record is deleted");
+            // Handle Errors
+            if(err) {
+              console.log(err);
+          }
+          else{
+            return res.json([]);
+        }
+    });*/
 
 });
 
