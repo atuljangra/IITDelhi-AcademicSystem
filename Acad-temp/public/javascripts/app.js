@@ -146,6 +146,40 @@ var query_func = function($scope, $http, id) {
     });
 }
 
+var login_func = function ($scope, $http, $username) {
+    var user = $username;
+    console.log(user);
+    var ret_func;
+    ret_func = $http.get('/login/id' + user);
+    ret_func.success(function(data) {
+        console.log("Success " + data);
+        $scope.username = '';
+    });
+    ret_func.error(function(error) {
+        console.log("Error " + error);
+    });
+}
+
+var getLoggedIn_func = function($scope, $http) {
+    var ret_func = $http.get('/login/get');
+    ret_func.success(function(data) {
+        console.log("Success " + data);
+    });
+    ret_func.error(function(err) {
+        console.log(err);
+    });
+}
+
+var logout_func = function($scope, $http) {
+    var ret_func = $http.get('/logout');
+    ret_func.success(function(data) {
+        console.log("Success " + data);
+    });
+    ret_func.error(function(err) {
+        console.log("Error " + err);
+    });
+}
+
 nodeAcad.controller('mainController', function($scope, $http) {
     $scope.formData = {};
     $scope.facultyData = {};
@@ -156,6 +190,7 @@ nodeAcad.controller('mainController', function($scope, $http) {
     $scope.is_faculty = true;
     $scope.is_students = false;
     $scope.is_courses = false;
+    $scope.loginStatus={};
 
     get_func($scope, $http);
     $scope.add = function() {
@@ -191,7 +226,15 @@ nodeAcad.controller('mainController', function($scope, $http) {
         $scope.is_courses = true;
         get_func($scope, $http);
     }
-
+    $scope.login = function() {
+        login_func($scope, $http, $scope.username);
+    }
+    $scope.getLoggedIn = function() {
+        getLoggedIn_func($scope, $http);
+    }
+    $scope.logout = function() {
+        logout_func($scope, $http);
+    }
 });
 
 
