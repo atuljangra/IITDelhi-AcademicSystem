@@ -121,6 +121,8 @@ var add_record = function($scope, $http){
         req_url = $http.post('/students/addrecord', $scope.formData);
     }
     else if($scope.is_courses_offered){
+        $scope.formData.totalapplicants = 0;
+        $scope.formData.statuscode = "Open";
         req_url = $http.post('/coursesoffered/addrecord', $scope.formData);
     }
     else if($scope.is_courses_registered){
