@@ -178,39 +178,75 @@
     acPortal.controller('mainCtrl', ['$scope','$http', '$window', function($scope, $http, $window){
 
         $scope.is_login = true;
+        $scope.user_admin = false;
         $scope.user_list = ['faculty','student','admin'];
+        $scope.listOfModifications =['profile','none'];
+        var user_type = 'none';
         var login_id; 
 
         $scope.login_user = function(data){
-         $scope.user_type = data.type;
+            $scope.user_admin = false;
+        user_type = data.type;
          $scope.is_login = false;
          $scope.is_loggedin = true;
          if(data.type === 'student'){
             login_id = data.userid;
             $scope.show_studentContainer = true;
             $scope.show_facultyContainer = false;
-            $scope.show_adminContainer = false;
+            $scope.show_adminContainer = true;
         }
         else if(data.type === 'faculty'){
 
             login_id = data.userid;
             $scope.show_facultyContainer = true;
-            $scope.show_studentContainer = false;
+            $scope.show_studentContainer = true;
             $scope.show_adminContainer = false;
         }
         else if(data.type === 'admin'){
           $scope.show_facultyContainer = false;
           $scope.show_studentContainer = false;
           $scope.show_adminContainer = true;
+          $scope.user_admin = true;
       }
+  
   }
+$scope.profile_viewer = function(){
+    {
+        if(angular.equals($scope.selectedOption, "profile")){
+            $scope.is_students = false;
+            console.log("Clicked department");
+            $scope.is_courseMaster = false;
+            $scope.is_faculty = false;
+            $scope.is_deptMaster = false;
+            if(user_type === 'faculty')
+             $scope.show_facultyContainer = true;
+          else if(user_type === 'student')
+                $scope.show_studentContainer = true;
+            $scope.displayedit(login_id);
+      
+        }
+        if(angular.equals($scope.selectedOption, "none")){
+                $scope.is_deptMaster=false; //to hide the instructor record container in crud.html 
+                $scope.is_courseMaster = false; // to display the course record container in crud.html
+                $scope.is_students = false;
+                $scope.is_faculty = false;
+                $scope.show_facultyContainer = false;
+                $scope.show_studentContainer = false;
+      
+            }
+            
+            $scope.show_profileView = true;
 
+        }
+
+}
 
 
         //==========Variables and functions to show and hide tables/forms/buttons==========\\ 
 
         $scope.show_addContainer  = false;
         $scope.show_infoContainer = false;
+        $scope.show_profileView = false;
 
        $scope.is_students = false;//initally student records are hidden
        $scope.is_instructor=false;//Initially instructor records are hidden, will be displayed when we click instructor button
@@ -220,6 +256,8 @@
        $scope.listOfOptions = ['Departments', 'Courses', 'Students', 'Faculty'];
 
        $scope.selectedItemChanged = function(){
+         $scope.show_facultyContainer = false;
+          $scope.show_studentContainer = false;
         if(angular.equals($scope.selectedItem, "Departments")){
             $scope.is_students = false;
             console.log("Clicked department");
@@ -249,8 +287,10 @@
                 $scope.is_students = false;
                 displayInfo();
             }
+            $scope.show_profileView = true;
 
         }
+       
 
     //function to display the table
 
@@ -270,6 +310,7 @@
                 $scope.show_students = false;
                 $scope.show_faculty = false;
                 show_record($scope, $http); //call the display function
+
             }
 
             else if($scope.is_courseMaster){
@@ -321,7 +362,8 @@
             showAddFaculty();
         }
     }
-
+$scope.update_faculty = false;
+$scope.update_students = false;
        // to display information of the record with id, on an editable form 
        $scope.displayedit  = function(id){
 
@@ -346,6 +388,7 @@
          }
          else if($scope.is_students){
              $scope.update_courses = false;
+             if($scope.user_admin)
              $scope.update_students =  true;
              $scope.update_faculty = false;      
              $scope.update_departments = false;
@@ -353,6 +396,7 @@
          else{
              $scope.update_courses = false;
              $scope.update_students =  false;
+            if($scope.user_admin)
              $scope.update_faculty = true;      
              $scope.update_departments = false;
          }
@@ -366,18 +410,6 @@
         $scope.myFacProfile = true;
         console.log("Hey fac prf");
         edit($scope, $http, login_id);
-    }
-}
-
-$scope.back = function(){
-    if($scope.show_adminContainer){
-        if(angular.equals($scope.selectedItem, "Departments")||angular.equals($scope.selectedItem, "Courses")||angular.equals($scope.selectedItem, "Students")||angular.equals($scope.selectedItem, "Faculty") ){
-            $scope.show_profileContainer = false;
-            $scope.show_addContainer = false; 
-            $scope.show_infoContainer = true;
-            show_record($scope, $http); //call the display function
-        }
-
     }
 }
 
