@@ -270,7 +270,6 @@
                 $scope.show_students = false;
                 $scope.show_faculty = false;
                 show_record($scope, $http); //call the display function
-
             }
 
             else if($scope.is_courseMaster){
@@ -367,6 +366,18 @@
         $scope.myFacProfile = true;
         console.log("Hey fac prf");
         edit($scope, $http, login_id);
+    }
+}
+
+$scope.back = function(){
+    if($scope.show_adminContainer){
+        if(angular.equals($scope.selectedItem, "Departments")||angular.equals($scope.selectedItem, "Courses")||angular.equals($scope.selectedItem, "Students")||angular.equals($scope.selectedItem, "Faculty") ){
+            $scope.show_profileContainer = false;
+            $scope.show_addContainer = false; 
+            $scope.show_infoContainer = true;
+            show_record($scope, $http); //call the display function
+        }
+
     }
 }
 

@@ -17,10 +17,10 @@
             </div>
           </div>
         </nav>
+
         <div class="container"  ng-controller ="mainCtrl">
 
           <!--login html-->
-
           <div class = "jumbotron" ng-show = "is_login">
            <form class="form-horizontal" role="form" name="login_form">
             <h2>Login into account</h2>
@@ -66,7 +66,10 @@
             ng-change="selectedItemChanged()"></select>
             <a class="btn btn-primary btn-lg" ng-click="new_record()">Add</a>
             <a class="btn btn-primary btn-lg pull-right" href='/'  target="_self">Administrator</a>
-
+            <div>
+            <a class="btn btn-warning btn-sm " ng-show="show_profileContainer|| show_addContainer" ng-click="back()">
+              <span class="glyphicon glyphicon-arrow-left"></span> Back to records</a>
+            </div>
           </div>
 
           <div class="container" ng-show="show_addContainer">
@@ -320,13 +323,19 @@
                         <input type="text" class="form-control" ng-model="querykey.name">
                       </td>
                       <td>
-                        <button class="btn btn-primary" ng-click="querysearch()" > Find this record</button>
+                        <button class="btn btn-info" ng-click="querysearch()" > 
+                           <span class="glyphicon glyphicon-search"></span> Search</button>
                       </td>
                     </tr>
                     <tr ng-repeat = "data in full_list">
                       <td>{{data.dpid}}</td>
                       <td>{{data.deptname}}</td>
-                      <td><button class="btn btn-primary" ng-click="displayedit(data.dpid)"> Open Record</button></td>
+                      <td>
+                        <button class="btn btn-sm" ng-click="displayedit(data.dpid)"> 
+                            <span class="glyphicon glyphicon-pencil"></span>
+                            <span class="glyphicon glyphicon-remove"></span>
+                            Open</button>
+                      </td>
                     </tr>
                   </tbody>
                 </table>
@@ -345,10 +354,6 @@
                       <th>Credits</th>
                       <th>Pre-Req</th> 
                       <th></th>
-                      <th></th> 
-                      <th></th>
-                      <th></th>
-                      <th></th>
                     </tr>   
                   </thead>
                   <tbody>
@@ -366,11 +371,9 @@
                       <input type="text" class="form-control" ng-model="querykey.credits">
                     </td>
                     <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
                     <td>
-                      <button class="btn btn-primary" ng-click="querysearch()" > Find this record</button>
+                      <button class="btn btn-info" ng-click="querysearch()" > 
+                        <span class="glyphicon glyphicon-search"></span> Search</button>
                     </td>
                   </tr>
                   <tr ng-repeat = "data in full_list">
@@ -382,7 +385,12 @@
                       {{data.pre_req2}}
                       {{data.pre_req3}}
                       {{data.pre_req4}}</td>
-                      <td><button class="btn btn-primary" ng-click="displayedit(data.crid)"> Open Record</button></td>
+                      <td>
+                        <button class="btn btn-sm" ng-click="displayedit(data.crid)"> 
+                            <span class="glyphicon glyphicon-pencil"></span>
+                            <span class="glyphicon glyphicon-remove"></span>
+                            Open</button>
+                      </td>
                     </tr>
                   </tbody>
                 </table>
@@ -434,7 +442,8 @@
                             <input type="text" class="form-control" ng-model="querykey.contactno">
                           </td>
                           <td>
-                            <button class="btn btn-primary" ng-click="querysearch()" > Find this record</button>
+                            <button class="btn btn-info" ng-click="querysearch()" > 
+                              <span class="glyphicon glyphicon-search"></span> Search</button>
                           </td>
                         </tr>                                        
                         <tr ng-repeat = "data in full_list">
@@ -446,7 +455,12 @@
                           <td>{{data.address}}</td>
                           <td>{{data.emailid}}</td>
                           <td>{{data.contactno}}</td>                                                                                       
-                          <td><button class="btn btn-primary" ng-click="displayedit(data.stid)"> Open Record</button></td>
+                          <td>
+                        <button class="btn btn-sm" ng-click="displayedit(data.stid)"> 
+                            <span class="glyphicon glyphicon-pencil"></span>
+                            <span class="glyphicon glyphicon-remove"></span>
+                            Open</button>
+                          </td>
                         </tr>
                       </tbody>
                     </table>
@@ -495,7 +509,8 @@
                         <td>
                         </td>
                         <td>
-                          <button class="btn btn-primary" ng-click="querysearch()" > Find this record</button>
+                          <button class="btn btn-info" ng-click="querysearch()" >
+                          <span class="glyphicon glyphicon-search"></span> Search</button>
                         </td>
                       </tr>
                       <tr ng-repeat = "data in full_list">
@@ -506,7 +521,12 @@
                         <td>{{data.emailid}} </td>
                         <td> {{data.contactno}} </td>
                         <td>{{data.areas}}</td> 
-                        <td><button class="btn btn-primary" ng-click="displayedit(data.fcid)"> Open Record</button></td>
+                        <td>
+                        <button class="btn btn-sm" ng-click="displayedit(data.fcid)"> 
+                            <span class="glyphicon glyphicon-pencil"></span>
+                            <span class="glyphicon glyphicon-remove"></span>
+                            Open</button>
+                        </td>
                       </tr>
                     </tbody>
                   </table>
@@ -787,7 +807,7 @@
                   <div class="form-group">        
                     <div class="col-sm-offset-2 col-sm-10">
                      <td><button class="btn btn-info" ng-click="updaterecord(data.stid)">Update</button></td>
-                     
+
                    </div>
                  </div>
                </form>
@@ -802,7 +822,7 @@
             </div>
             <div class="container" ng-show="myFacProfile">
 
-              
+
               <form class="form-horizontal" role="form">
                <div class="form-group">
                 <label class="control-label col-sm-2">Faculty ID</label>
@@ -850,15 +870,15 @@
                 <div class="form-group">        
                   <div class="col-sm-offset-2 col-sm-10">
                    <td><button class="btn btn-info" ng-click="updaterecord(data.fcid)">Update</button></td>
-                   
+
                  </div>
                </div>
              </form>
            </div>
          </div>
-         
+
          <!-- End of Faculty Container-->
-         
+
 
        </div>
        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.16/angular.min.js"></script>
