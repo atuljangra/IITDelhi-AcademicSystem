@@ -13,7 +13,7 @@ router.get('/', function(req, res, next) {
     res.sendFile(path.join(__dirname,'../','views','crud.html'));
 });
 
-var conString = "postgres://postgres:postgres@localhost/academicportal";
+var conString = "postgres://postgres:password@localhost/academicportal";
 
 
 //---------Display all records ---------------------\\

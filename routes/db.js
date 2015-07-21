@@ -1,6 +1,6 @@
 var pg = require('pg');
 var username = 'postgres';
-var password = 'postgres';
+var password = 'password';
 var host = 'localhost';
 var port ='5432';
 var dbname = 'academicportal';
