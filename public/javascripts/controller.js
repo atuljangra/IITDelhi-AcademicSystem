@@ -179,31 +179,59 @@
 
         $scope.is_login = true;
         $scope.user_list = ['faculty','student','admin'];
+        //change 1 \\
+        $scope.listOfModifications =['profile','none'];
+        $scope.user_admin = false;
+       var user_type = 'none';
         var login_id; 
-
+      
         $scope.login_user = function(data){
-         $scope.user_type = data.type;
+         user_type = data.type;
          $scope.is_login = false;
          $scope.is_loggedin = true;
          if(data.type === 'student'){
             login_id = data.userid;
             $scope.show_studentContainer = true;
             $scope.show_facultyContainer = false;
-            $scope.show_adminContainer = false;
+            $scope.show_adminContainer = true;
         }
         else if(data.type === 'faculty'){
 
             login_id = data.userid;
             $scope.show_facultyContainer = true;
             $scope.show_studentContainer = false;
-            $scope.show_adminContainer = false;
+            $scope.show_adminContainer = true;
         }
         else if(data.type === 'admin'){
           $scope.show_facultyContainer = false;
           $scope.show_studentContainer = false;
           $scope.show_adminContainer = true;
+          //change 1.2\\
+          $scope.user_admin = true;
       }
   }
+  //change 2\\
+  $scope.profile_viewer = function(){
+    {
+        
+            $scope.is_students = false;
+            console.log("Clicked department");
+            $scope.is_courseMaster = false;
+            $scope.is_faculty = false;
+            $scope.is_deptMaster = false;
+            if(user_type === 'faculty')
+             $scope.show_facultyContainer = true;
+          else if(user_type === 'student')
+                $scope.show_studentContainer = true;
+            $scope.displayedit(login_id);
+      
+       
+            $scope.show_profileView = true;
+
+        }
+
+    }
+  //ends
 
 
 
@@ -220,6 +248,8 @@
        $scope.listOfOptions = ['Departments', 'Courses', 'Students', 'Faculty'];
 
        $scope.selectedItemChanged = function(){
+        $scope.show_facultyContainer = false;
+          $scope.show_studentContainer = false;
         if(angular.equals($scope.selectedItem, "Departments")){
             $scope.is_students = false;
             console.log("Clicked department");
@@ -249,7 +279,7 @@
                 $scope.is_students = false;
                 displayInfo();
             }
-
+                 
         }
 
     //function to display the table
@@ -322,6 +352,11 @@
         }
     }
 
+
+        //change 3 to initialise update_faculty etc. to false
+        $scope.update_faculty = false;
+        $scope.update_students = false;
+        //ends
        // to display information of the record with id, on an editable form 
        $scope.displayedit  = function(id){
 
@@ -346,6 +381,7 @@
          }
          else if($scope.is_students){
              $scope.update_courses = false;
+             if($scope.user_admin)
              $scope.update_students =  true;
              $scope.update_faculty = false;      
              $scope.update_departments = false;
@@ -353,6 +389,7 @@
          else{
              $scope.update_courses = false;
              $scope.update_students =  false;
+             if($scope.user_admin)
              $scope.update_faculty = true;      
              $scope.update_departments = false;
          }
@@ -376,6 +413,8 @@ $scope.back = function(){
             $scope.show_addContainer = false; 
             $scope.show_infoContainer = true;
             show_record($scope, $http); //call the display function
+            $scope.show_facultyContainer = false;
+          $scope.show_studentContainer = false;
         }
 
     }
